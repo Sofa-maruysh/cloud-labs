@@ -25,7 +25,7 @@
    docker compose up --build
    ```
 
-4. Открыть в браузере <http://localhost:5000>.
+4. Открыть в браузере <http://localhost:5050>.
 5. Ввести задачу, нажать «Добавить» и обновить страницу. Задача останется в списке, так как она сохранена в PostgreSQL.
 
 ## Остановка
@@ -41,4 +41,3 @@ docker compose down
 ```bash
 docker compose down -v
 ```
-

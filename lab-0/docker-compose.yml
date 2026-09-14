@@ -15,10 +15,9 @@ services:
     environment:
       DATABASE_URL: postgresql://labuser:labpassword@db:5432/labdb
     ports:
-      - "5000:5000"
+      - "5050:5000"
     depends_on:
       - db
 
 volumes:
   postgres_data:
-
