@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Список задач</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <h1>Список задач</h1>
+    <p>Задачи сохраняются в PostgreSQL.</p>
+
+    <form action="{{ url_for('add_task') }}" method="post">
+      <label for="text">Новая задача</label>
+      <div class="form-row">
+        <input id="text" name="text" maxlength="200" required placeholder="Например, выполнить лабораторную">
+        <button type="submit">Добавить</button>
+      </div>
+    </form>
+
+    <h2>Сохранённые задачи</h2>
+    {% if tasks %}
+      <ul>
+        {% for task in tasks %}
+          <li>{{ task[1] }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Пока задач нет.</p>
+    {% endif %}
+  </main>
+</body>
+</html>
+
