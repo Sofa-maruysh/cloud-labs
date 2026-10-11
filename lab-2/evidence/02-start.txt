@@ -1,0 +1,135 @@
+Опыт: 02-start
+2026-10-10T00:49:26.817634+03:00
+$ docker compose -f compose.yaml config --quiet
+exit_code=0
+$ docker compose -f compose.yaml up -d --build --wait --wait-timeout 120
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.12kB 0.1s done
+#1 DONE 0.1s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.43kB 0.0s done
+#2 DONE 0.1s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 438B 0.0s done
+#3 DONE 0.1s
+
+#4 [backend internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#4 DONE 0.2s
+
+#5 [frontend internal] load metadata for docker.io/library/nginx:1.28.0-alpine@sha256:30f1c0d78e0ad60901648be663a710bdadf19e4c10ac6782c235200619158284
+#5 DONE 0.2s
+
+#6 [backend internal] load .dockerignore
+#6 transferring context: 95B 0.0s done
+#6 DONE 0.0s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 97B 0.0s done
+#7 DONE 0.0s
+
+#8 [frontend internal] load build context
+#8 transferring context: 117B 0.0s done
+#8 DONE 0.0s
+
+#9 [backend internal] load build context
+#9 transferring context: 64B 0.0s done
+#9 DONE 0.1s
+
+#10 [frontend 1/3] FROM docker.io/library/nginx:1.28.0-alpine@sha256:30f1c0d78e0ad60901648be663a710bdadf19e4c10ac6782c235200619158284
+#10 resolve docker.io/library/nginx:1.28.0-alpine@sha256:30f1c0d78e0ad60901648be663a710bdadf19e4c10ac6782c235200619158284 0.1s done
+#10 DONE 0.1s
+
+#11 [backend builder 1/4] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#11 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.1s done
+#11 DONE 0.1s
+
+#12 [frontend 2/3] COPY nginx.conf /etc/nginx/nginx.conf
+#12 CACHED
+
+#13 [frontend 3/3] COPY index.html app.js style.css /usr/share/nginx/html/
+#13 CACHED
+
+#14 [backend builder 3/4] COPY requirements.txt .
+#14 CACHED
+
+#15 [backend builder 4/4] RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+#15 CACHED
+
+#16 [backend runtime 4/5] RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+#16 CACHED
+
+#17 [backend runtime 3/5] COPY --from=builder /opt/venv /opt/venv
+#17 CACHED
+
+#18 [backend runtime 2/5] WORKDIR /app
+#18 CACHED
+
+#19 [backend builder 2/4] WORKDIR /build
+#19 CACHED
+
+#20 [backend runtime 5/5] COPY --chown=app:app app.py .
+#20 CACHED
+
+#21 [backend] exporting to image
+#21 exporting layers 0.0s done
+#21 exporting manifest sha256:4faedaa68c39215f56199e5d4a7d0c44a7adcf9e9f0812e1fd6f4ef87a116b7c done
+#21 exporting config sha256:9ab91948604871cf8ba7257c30361dfefa2279dde192355550b20bfa2328c343 done
+#21 exporting attestation manifest sha256:f35aaa34950caab72aa3c49f5e1aba9183054d3705e7b2fe01f88cb73f5589e6 0.1s done
+#21 exporting manifest list sha256:e7c32b2d42f7d46aca2de90ffe85ecb3822034cb93f2b2b0ed008aa3b885ff9a
+#21 exporting manifest list sha256:e7c32b2d42f7d46aca2de90ffe85ecb3822034cb93f2b2b0ed008aa3b885ff9a 0.0s done
+#21 naming to docker.io/library/cloud-lab2-backend:good 0.0s done
+#21 unpacking to docker.io/library/cloud-lab2-backend:good 0.0s done
+#21 DONE 0.4s
+
+#22 [frontend] exporting to image
+#22 exporting layers 0.0s done
+#22 exporting manifest sha256:a8f88b3667ac77f6557d71417a0a87e362459b23a9651508065c2efb06749e61 done
+#22 exporting config sha256:aff302bf0b6d36da14c7f3d758e84b9da518b22a96ded356ec8f8b72653c99f9 0.0s done
+#22 exporting attestation manifest sha256:a1a4eeec3ee4a87ffdf1fb59143a3f05999dcfcfa9a8b6ad2b5b76eed22ed54c 0.1s done
+#22 exporting manifest list sha256:c96acefc0c633b1070232a51f5a5b20038663f5454dd81e814da508499f10669 0.0s done
+#22 naming to docker.io/library/cloud-lab2-frontend:good 0.0s done
+#22 unpacking to docker.io/library/cloud-lab2-frontend:good 0.1s done
+#22 DONE 0.4s
+
+#23 [frontend] resolving provenance for metadata file
+#23 DONE 0.1s
+
+#24 [backend] resolving provenance for metadata file
+#24 DONE 0.0s
+ Image cloud-lab2-frontend:good Building 
+ Image cloud-lab2-backend:good Building 
+ Image cloud-lab2-backend:good Built 
+ Image cloud-lab2-frontend:good Built 
+ Container cloud-lab2-db-1 Running 
+ Container cloud-lab2-backend-1 Recreate 
+ Container cloud-lab2-backend-1 Recreated 
+ Container cloud-lab2-frontend-1 Recreate 
+ Container cloud-lab2-frontend-1 Recreated 
+ Container cloud-lab2-db-1 Waiting 
+ Container cloud-lab2-db-1 Healthy 
+ Container cloud-lab2-backend-1 Starting 
+ Container cloud-lab2-backend-1 Started 
+ Container cloud-lab2-backend-1 Waiting 
+ Container cloud-lab2-backend-1 Healthy 
+ Container cloud-lab2-frontend-1 Starting 
+ Container cloud-lab2-frontend-1 Started 
+ Container cloud-lab2-frontend-1 Waiting 
+ Container cloud-lab2-db-1 Waiting 
+ Container cloud-lab2-backend-1 Waiting 
+ Container cloud-lab2-backend-1 Healthy 
+ Container cloud-lab2-db-1 Healthy 
+ Container cloud-lab2-frontend-1 Healthy
+exit_code=0
+$ docker compose -f compose.yaml ps
+NAME                    IMAGE                                                                                              COMMAND                  SERVICE    CREATED          STATUS                    PORTS
+cloud-lab2-backend-1    cloud-lab2-backend:good                                                                            "gunicorn --bind 0.0…"   backend    21 seconds ago   Up 15 seconds (healthy)   5000/tcp
+cloud-lab2-db-1         postgres:17.6-alpine3.22@sha256:ef257d85f76e48da1c64832459b59fcaba1a4dac97bf5d7450c77753542eee94   "docker-entrypoint.s…"   db         9 minutes ago    Up 4 minutes (healthy)    5432/tcp
+cloud-lab2-frontend-1   cloud-lab2-frontend:good                                                                           "nginx -g 'daemon of…"   frontend   18 seconds ago   Up 6 seconds (healthy)    127.0.0.1:5052->8080/tcp
+exit_code=0
+$ curl -sS --max-time 12 -w "\nHTTP %{http_code}\n" http://127.0.0.1:5052/api/healthz
+{"database":"ok","status":"ok"}
+
+HTTP 200
+exit_code=0

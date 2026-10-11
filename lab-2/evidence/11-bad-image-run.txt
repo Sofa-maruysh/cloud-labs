@@ -1,0 +1,20 @@
+Опыт: 11-bad-image-run
+2026-10-10T01:02:57.617372+03:00
+$ docker compose -f compose.yaml -f compose.bad.yaml run -d --rm --no-deps --name cloud-lab2-bad-demo backend
+2a45348128f23cd37905d8dfbc35cb0ff501171c1abdcdfe86c006b57768001c
+ Container cloud-lab2-bad-demo Creating 
+ Container cloud-lab2-bad-demo Created
+exit_code=0
+$ docker compose -f compose.yaml exec -T backend python -c "import urllib.request; r=urllib.request.urlopen('http://cloud-lab2-bad-demo:5000/api/healthz',timeout=10); print('bad API HTTP',r.status); print(r.read().decode())"
+bad API HTTP 200
+{"database":"ok","status":"ok"}
+exit_code=0
+$ docker exec cloud-lab2-bad-demo whoami
+root
+exit_code=0
+$ docker inspect cloud-lab2-bad-demo --format "health={{json .Config.Healthcheck}} user={{json .Config.User}}"
+health=null user=""
+exit_code=0
+$ docker stop cloud-lab2-bad-demo
+cloud-lab2-bad-demo
+exit_code=0

@@ -1,0 +1,728 @@
+Опыт: 01-images-cache
+2026-10-10T00:35:51.091937+03:00
+$ docker version
+Client:
+ Version:           29.2.1
+ API version:       1.53
+ Go version:        go1.25.6
+ Git commit:        a5c7197
+ Built:             Mon Feb  2 17:20:16 2026
+ OS/Arch:           windows/amd64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.62.0 (219486)
+ Engine:
+  Version:          29.2.1
+  API version:      1.53 (minimum version 1.44)
+  Go version:       go1.25.6
+  Git commit:       6bc6209
+  Built:            Mon Feb  2 17:17:24 2026
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v2.2.1
+  GitCommit:        dea7da592f5d1d2b7755e3a161be07f43fad8f75
+ runc:
+  Version:          1.3.4
+  GitCommit:        v1.3.4-0-gd6d73eb8
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+exit_code=0
+$ docker compose version
+Docker Compose version v5.0.2
+exit_code=0
+$ docker build --progress=plain -f backend/Dockerfile.bad -t cloud-lab2-backend:bad backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.bad
+#1 transferring dockerfile: 1.24kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12
+#2 DONE 0.1s
+
+#3 [1/4] FROM docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee
+#3 resolve docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee 0.1s done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 3.10kB 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] WORKDIR /app
+#5 CACHED
+
+#6 [3/4] COPY . .
+#6 CACHED
+
+#7 [4/4] RUN pip install -r requirements.txt
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers 0.0s done
+#8 exporting manifest sha256:2091f52f1e83e40766e42a79994cfbb587b62828b98e428761715841a72732ac done
+#8 exporting config sha256:89eac045f2b5140e88d72cfb91c77e36f6c921d93f9d1fcd3f165e6cb636d9f1 done
+#8 exporting attestation manifest sha256:4e21d0c30689fbda64c44f94321dc9286a32eb57646627c20d409d12ef839ef4 0.1s done
+#8 exporting manifest list sha256:2bb542302dfab320509a238364bf1788df728a07edd56b3711f9182b4faf4686 0.0s done
+#8 naming to docker.io/library/cloud-lab2-backend:bad done
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad 0.1s done
+#8 DONE 0.3s
+exit_code=0
+Первичная сборка bad: 2.228 s
+$ docker build --progress=plain -f backend/Dockerfile -t cloud-lab2-backend:good backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.43kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 95B 0.0s done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 64B done
+#4 DONE 0.0s
+
+#5 [builder 1/4] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#5 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.1s done
+#5 DONE 0.2s
+
+#6 [runtime 2/5] WORKDIR /app
+#6 DONE 0.2s
+
+#7 [builder 2/4] WORKDIR /build
+#7 DONE 0.2s
+
+#8 [builder 3/4] COPY requirements.txt .
+#8 DONE 0.1s
+
+#9 [builder 4/4] RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+#9 11.33 Collecting Flask==3.1.0 (from -r requirements.txt (line 1))
+#9 11.75   Downloading flask-3.1.0-py3-none-any.whl.metadata (2.7 kB)
+#9 11.85 Collecting psycopg==3.2.3 (from psycopg[binary]==3.2.3->-r requirements.txt (line 2))
+#9 11.91   Downloading psycopg-3.2.3-py3-none-any.whl.metadata (4.3 kB)
+#9 12.02 Collecting gunicorn==23.0.0 (from -r requirements.txt (line 3))
+#9 12.09   Downloading gunicorn-23.0.0-py3-none-any.whl.metadata (4.4 kB)
+#9 12.17 Collecting blinker==1.9.0 (from -r requirements.txt (line 4))
+#9 12.22   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#9 12.32 Collecting click==8.1.8 (from -r requirements.txt (line 5))
+#9 12.38   Downloading click-8.1.8-py3-none-any.whl.metadata (2.3 kB)
+#9 12.45 Collecting itsdangerous==2.2.0 (from -r requirements.txt (line 6))
+#9 12.51   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+#9 12.63 Collecting Jinja2==3.1.6 (from -r requirements.txt (line 7))
+#9 12.72   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#9 12.93 Collecting MarkupSafe==3.0.3 (from -r requirements.txt (line 8))
+#9 13.03   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#9 13.18 Collecting Werkzeug==3.1.3 (from -r requirements.txt (line 9))
+#9 13.24   Downloading werkzeug-3.1.3-py3-none-any.whl.metadata (3.7 kB)
+#9 13.33 Collecting packaging==25.0 (from -r requirements.txt (line 10))
+#9 13.39   Downloading packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+#9 13.48 Collecting typing_extensions==4.15.0 (from -r requirements.txt (line 11))
+#9 13.54   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+#9 14.07 Collecting psycopg-binary==3.2.3 (from psycopg[binary]==3.2.3->-r requirements.txt (line 2))
+#9 14.14   Downloading psycopg_binary-3.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.8 kB)
+#9 14.21 Downloading flask-3.1.0-py3-none-any.whl (102 kB)
+#9 14.36 Downloading psycopg-3.2.3-py3-none-any.whl (197 kB)
+#9 14.48 Downloading gunicorn-23.0.0-py3-none-any.whl (85 kB)
+#9 14.55 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#9 14.61 Downloading click-8.1.8-py3-none-any.whl (98 kB)
+#9 14.69 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#9 14.75 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#9 14.83 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#9 14.91 Downloading werkzeug-3.1.3-py3-none-any.whl (224 kB)
+#9 15.00 Downloading packaging-25.0-py3-none-any.whl (66 kB)
+#9 15.07 Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+#9 15.13 Downloading psycopg_binary-3.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.2 MB)
+#9 15.54    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.2/4.2 MB 10.7 MB/s eta 0:00:00
+#9 15.65 Installing collected packages: typing_extensions, psycopg-binary, packaging, MarkupSafe, itsdangerous, click, blinker, Werkzeug, psycopg, Jinja2, gunicorn, Flask
+#9 18.14 Successfully installed Flask-3.1.0 Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-3.1.3 blinker-1.9.0 click-8.1.8 gunicorn-23.0.0 itsdangerous-2.2.0 packaging-25.0 psycopg-3.2.3 psycopg-binary-3.2.3 typing_extensions-4.15.0
+#9 DONE 18.4s
+
+#10 [runtime 3/5] COPY --from=builder /opt/venv /opt/venv
+#10 DONE 1.3s
+
+#11 [runtime 4/5] RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+#11 DONE 0.6s
+
+#12 [runtime 5/5] COPY --chown=app:app app.py .
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 3.5s done
+#13 exporting manifest sha256:fbca3a66eaedcfdade375e42713d6c66588c3250914159cd0fb3d3699959569f 0.0s done
+#13 exporting config sha256:fcecaa1ac047a95c8bcca9d8b7f7749c822206c5c1f25f605ae2c0a68270e152 0.0s done
+#13 exporting attestation manifest sha256:c084def0bb52fe8b7ff2e86bf0ad816691ebc3e724a6a2007a4f1c2295ff56ce 0.1s done
+#13 exporting manifest list sha256:0f660be51403ea7322f245fe3d46775091eddf56fd3b7481087cd0837faf8509
+#13 exporting manifest list sha256:0f660be51403ea7322f245fe3d46775091eddf56fd3b7481087cd0837faf8509 0.0s done
+#13 naming to docker.io/library/cloud-lab2-backend:good done
+#13 unpacking to docker.io/library/cloud-lab2-backend:good
+#13 unpacking to docker.io/library/cloud-lab2-backend:good 1.9s done
+#13 DONE 5.7s
+exit_code=0
+Первичная сборка good: 28.838 s
+$ docker build --progress=plain -f backend/Dockerfile.bad -t cloud-lab2-backend:bad backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.bad
+#1 transferring dockerfile: 1.24kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12
+#2 DONE 0.1s
+
+#3 [1/4] FROM docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee
+#3 resolve docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee 0.1s done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 6.04kB 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] WORKDIR /app
+#5 CACHED
+
+#6 [3/4] COPY . .
+#6 DONE 0.2s
+
+#7 [4/4] RUN pip install -r requirements.txt
+#7 4.492 Collecting Flask==3.1.0 (from -r requirements.txt (line 1))
+#7 4.822   Downloading flask-3.1.0-py3-none-any.whl.metadata (2.7 kB)
+#7 4.962 Collecting psycopg==3.2.3 (from psycopg[binary]==3.2.3->-r requirements.txt (line 2))
+#7 5.023   Downloading psycopg-3.2.3-py3-none-any.whl.metadata (4.3 kB)
+#7 5.168 Collecting gunicorn==23.0.0 (from -r requirements.txt (line 3))
+#7 5.229   Downloading gunicorn-23.0.0-py3-none-any.whl.metadata (4.4 kB)
+#7 5.355 Collecting blinker==1.9.0 (from -r requirements.txt (line 4))
+#7 5.419   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#7 5.548 Collecting click==8.1.8 (from -r requirements.txt (line 5))
+#7 5.608   Downloading click-8.1.8-py3-none-any.whl.metadata (2.3 kB)
+#7 5.716 Collecting itsdangerous==2.2.0 (from -r requirements.txt (line 6))
+#7 5.780   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+#7 5.902 Collecting Jinja2==3.1.6 (from -r requirements.txt (line 7))
+#7 5.962   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#7 6.342 Collecting MarkupSafe==3.0.3 (from -r requirements.txt (line 8))
+#7 6.402   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#7 6.536 Collecting Werkzeug==3.1.3 (from -r requirements.txt (line 9))
+#7 6.624   Downloading werkzeug-3.1.3-py3-none-any.whl.metadata (3.7 kB)
+#7 6.769 Collecting packaging==25.0 (from -r requirements.txt (line 10))
+#7 6.858   Downloading packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+#7 6.985 Collecting typing_extensions==4.15.0 (from -r requirements.txt (line 11))
+#7 7.087   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+#7 7.922 Collecting psycopg-binary==3.2.3 (from psycopg[binary]==3.2.3->-r requirements.txt (line 2))
+#7 7.991   Downloading psycopg_binary-3.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.8 kB)
+#7 8.078 Downloading flask-3.1.0-py3-none-any.whl (102 kB)
+#7 8.250 Downloading psycopg-3.2.3-py3-none-any.whl (197 kB)
+#7 8.394 Downloading gunicorn-23.0.0-py3-none-any.whl (85 kB)
+#7 8.488 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#7 8.567 Downloading click-8.1.8-py3-none-any.whl (98 kB)
+#7 8.674 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#7 8.760 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#7 8.864 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#7 8.936 Downloading werkzeug-3.1.3-py3-none-any.whl (224 kB)
+#7 9.054 Downloading packaging-25.0-py3-none-any.whl (66 kB)
+#7 9.158 Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+#7 9.239 Downloading psycopg_binary-3.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.2 MB)
+#7 9.886    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.2/4.2 MB 6.6 MB/s eta 0:00:00
+#7 9.969 Installing collected packages: typing_extensions, psycopg-binary, packaging, MarkupSafe, itsdangerous, click, blinker, Werkzeug, psycopg, Jinja2, gunicorn, Flask
+#7 12.22 Successfully installed Flask-3.1.0 Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-3.1.3 blinker-1.9.0 click-8.1.8 gunicorn-23.0.0 itsdangerous-2.2.0 packaging-25.0 psycopg-3.2.3 psycopg-binary-3.2.3 typing_extensions-4.15.0
+#7 12.23 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#7 12.78 
+#7 12.78 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+#7 12.78 [notice] To update, run: pip install --upgrade pip
+#7 DONE 13.1s
+
+#8 exporting to image
+#8 exporting layers
+#8 exporting layers 3.4s done
+#8 exporting manifest sha256:d20725b95ba6ccd2f5dca67b58346eccbfdeeb78918fa6b811450a037261aa5c 0.0s done
+#8 exporting config sha256:36d99f55e770b7165477b1f6b4f6e2d4488bdc17067dbe5176be108959cd6e03 0.0s done
+#8 exporting attestation manifest sha256:0501509f1cb60202b35c293fda4f29cf0f9c566733d00e7dadddc7958c1d565b 0.1s done
+#8 exporting manifest list sha256:b8dab5ff48fdc304f02a4c6e2435d9197191142f7a2b207003c4db9018777e47
+#8 exporting manifest list sha256:b8dab5ff48fdc304f02a4c6e2435d9197191142f7a2b207003c4db9018777e47 0.0s done
+#8 naming to docker.io/library/cloud-lab2-backend:bad done
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad 1.9s done
+#8 DONE 5.6s
+exit_code=0
+Пересборка bad, замер 1: 20.706 s
+$ docker build --progress=plain -f backend/Dockerfile -t cloud-lab2-backend:good backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.43kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 95B 0.0s done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 64B done
+#4 DONE 0.0s
+
+#5 [builder 1/4] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#5 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.1s done
+#5 DONE 0.1s
+
+#6 [runtime 2/5] WORKDIR /app
+#6 CACHED
+
+#7 [builder 2/4] WORKDIR /build
+#7 CACHED
+
+#8 [builder 3/4] COPY requirements.txt .
+#8 CACHED
+
+#9 [builder 4/4] RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [runtime 3/5] COPY --from=builder /opt/venv /opt/venv
+#10 CACHED
+
+#11 [runtime 4/5] RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+#11 CACHED
+
+#12 [runtime 5/5] COPY --chown=app:app app.py .
+#12 DONE 0.2s
+
+#13 exporting to image
+#13 exporting layers 0.1s done
+#13 exporting manifest sha256:b2e1a772a7f6b504ab35db3b27a2b81cc999cc3604c5ea6d5dd5cbdfa9c4afcd 0.0s done
+#13 exporting config sha256:42ab52d8e9533e2c7dea546f32aefab32bfe1e82b06069e66b13524f074b1c1a 0.0s done
+#13 exporting attestation manifest sha256:36937fff4ce704f10c76973a4ed5f0207358c4ed41d567f4b6bfda942663f0df 0.1s done
+#13 exporting manifest list sha256:e2273e67257beb98b9e82eceb4c616fae1eb548f03f5e8c5ebc3db97dfeadb2e
+#13 exporting manifest list sha256:e2273e67257beb98b9e82eceb4c616fae1eb548f03f5e8c5ebc3db97dfeadb2e 0.0s done
+#13 naming to docker.io/library/cloud-lab2-backend:good done
+#13 unpacking to docker.io/library/cloud-lab2-backend:good 0.1s done
+#13 DONE 0.5s
+exit_code=0
+Пересборка good, замер 1: 2.577 s
+$ docker build --progress=plain -f backend/Dockerfile.bad -t cloud-lab2-backend:bad backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.bad
+#1 transferring dockerfile: 1.24kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12
+#2 DONE 0.1s
+
+#3 [1/4] FROM docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee
+#3 resolve docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee 0.1s done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 6.04kB 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] WORKDIR /app
+#5 CACHED
+
+#6 [3/4] COPY . .
+#6 DONE 0.1s
+
+#7 [4/4] RUN pip install -r requirements.txt
+#7 5.122 Collecting Flask==3.1.0 (from -r requirements.txt (line 1))
+#7 5.527   Downloading flask-3.1.0-py3-none-any.whl.metadata (2.7 kB)
+#7 5.739 Collecting psycopg==3.2.3 (from psycopg[binary]==3.2.3->-r requirements.txt (line 2))
+#7 5.800   Downloading psycopg-3.2.3-py3-none-any.whl.metadata (4.3 kB)
+#7 5.953 Collecting gunicorn==23.0.0 (from -r requirements.txt (line 3))
+#7 6.012   Downloading gunicorn-23.0.0-py3-none-any.whl.metadata (4.4 kB)
+#7 6.123 Collecting blinker==1.9.0 (from -r requirements.txt (line 4))
+#7 6.182   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#7 6.319 Collecting click==8.1.8 (from -r requirements.txt (line 5))
+#7 6.380   Downloading click-8.1.8-py3-none-any.whl.metadata (2.3 kB)
+#7 6.500 Collecting itsdangerous==2.2.0 (from -r requirements.txt (line 6))
+#7 6.558   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+#7 6.673 Collecting Jinja2==3.1.6 (from -r requirements.txt (line 7))
+#7 6.732   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#7 7.088 Collecting MarkupSafe==3.0.3 (from -r requirements.txt (line 8))
+#7 7.154   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#7 7.284 Collecting Werkzeug==3.1.3 (from -r requirements.txt (line 9))
+#7 7.343   Downloading werkzeug-3.1.3-py3-none-any.whl.metadata (3.7 kB)
+#7 7.461 Collecting packaging==25.0 (from -r requirements.txt (line 10))
+#7 7.518   Downloading packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+#7 7.650 Collecting typing_extensions==4.15.0 (from -r requirements.txt (line 11))
+#7 7.713   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+#7 8.487 Collecting psycopg-binary==3.2.3 (from psycopg[binary]==3.2.3->-r requirements.txt (line 2))
+#7 8.578   Downloading psycopg_binary-3.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.8 kB)
+#7 8.714 Downloading flask-3.1.0-py3-none-any.whl (102 kB)
+#7 8.845 Downloading psycopg-3.2.3-py3-none-any.whl (197 kB)
+#7 8.989 Downloading gunicorn-23.0.0-py3-none-any.whl (85 kB)
+#7 9.075 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#7 9.157 Downloading click-8.1.8-py3-none-any.whl (98 kB)
+#7 9.254 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#7 9.332 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#7 9.437 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#7 9.510 Downloading werkzeug-3.1.3-py3-none-any.whl (224 kB)
+#7 9.622 Downloading packaging-25.0-py3-none-any.whl (66 kB)
+#7 9.707 Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+#7 9.787 Downloading psycopg_binary-3.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.2 MB)
+#7 10.31    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.2/4.2 MB 8.9 MB/s eta 0:00:00
+#7 10.39 Installing collected packages: typing_extensions, psycopg-binary, packaging, MarkupSafe, itsdangerous, click, blinker, Werkzeug, psycopg, Jinja2, gunicorn, Flask
+#7 12.65 Successfully installed Flask-3.1.0 Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-3.1.3 blinker-1.9.0 click-8.1.8 gunicorn-23.0.0 itsdangerous-2.2.0 packaging-25.0 psycopg-3.2.3 psycopg-binary-3.2.3 typing_extensions-4.15.0
+#7 12.65 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#7 13.07 
+#7 13.07 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+#7 13.07 [notice] To update, run: pip install --upgrade pip
+#7 DONE 13.4s
+
+#8 exporting to image
+#8 exporting layers
+#8 exporting layers 3.6s done
+#8 exporting manifest sha256:81a5d8710bd5c1c9b05ab2f5057bfa852a9b334949bf9961f14ab080c612c00e 0.0s done
+#8 exporting config sha256:47e75df826e1abe10895dc9c1bf6be8aeea3e1fa56fa4a52c4d7f7db60e35c90 0.0s done
+#8 exporting attestation manifest sha256:fa0d65731e8907a83d3f08e4ecf7dc20a934fe260d72b3b4565e9de7fe9d1c7e 0.1s done
+#8 exporting manifest list sha256:6cc78197c701e7bf3d8ac78e6478bac4a7873c7371d424f23b4efbc60094f0a3
+#8 exporting manifest list sha256:6cc78197c701e7bf3d8ac78e6478bac4a7873c7371d424f23b4efbc60094f0a3 0.0s done
+#8 naming to docker.io/library/cloud-lab2-backend:bad done
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad 1.8s done
+#8 DONE 5.8s
+exit_code=0
+Пересборка bad, замер 2: 20.999 s
+$ docker build --progress=plain -f backend/Dockerfile -t cloud-lab2-backend:good backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.43kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 95B 0.0s done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 64B 0.0s done
+#4 DONE 0.0s
+
+#5 [builder 1/4] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#5 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.1s done
+#5 DONE 0.1s
+
+#6 [runtime 2/5] WORKDIR /app
+#6 CACHED
+
+#7 [builder 2/4] WORKDIR /build
+#7 CACHED
+
+#8 [builder 3/4] COPY requirements.txt .
+#8 CACHED
+
+#9 [builder 4/4] RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [runtime 3/5] COPY --from=builder /opt/venv /opt/venv
+#10 CACHED
+
+#11 [runtime 4/5] RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+#11 CACHED
+
+#12 [runtime 5/5] COPY --chown=app:app app.py .
+#12 DONE 0.2s
+
+#13 exporting to image
+#13 exporting layers 0.1s done
+#13 exporting manifest sha256:8c201f877a1b41ca999686d7c07fb036c878c673a6c5e076ff0fbbc1c3c15f4c 0.0s done
+#13 exporting config sha256:1960fee3f9fdf2ffad85c9a331e9ef69c1843669fff294eeaf7396dba5ed74ba 0.0s done
+#13 exporting attestation manifest sha256:97134669a996f4b23fd22742dfd6d0857b8d342c83138929755d8b3f1433005c 0.1s done
+#13 exporting manifest list sha256:26a61c620357e47e5e1dc869fff0ca1788416d2479f331a03fbe1d83d1585243
+#13 exporting manifest list sha256:26a61c620357e47e5e1dc869fff0ca1788416d2479f331a03fbe1d83d1585243 0.0s done
+#13 naming to docker.io/library/cloud-lab2-backend:good done
+#13 unpacking to docker.io/library/cloud-lab2-backend:good 0.1s done
+#13 DONE 0.5s
+exit_code=0
+Пересборка good, замер 2: 2.712 s
+$ docker build --progress=plain -f backend/Dockerfile.bad -t cloud-lab2-backend:bad backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.bad
+#1 transferring dockerfile: 1.24kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12
+#2 DONE 0.1s
+
+#3 [1/4] FROM docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee
+#3 resolve docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee 0.1s done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 6.04kB 0.0s done
+#4 DONE 0.1s
+
+#5 [2/4] WORKDIR /app
+#5 CACHED
+
+#6 [3/4] COPY . .
+#6 DONE 0.1s
+
+#7 [4/4] RUN pip install -r requirements.txt
+#7 4.290 Collecting Flask==3.1.0 (from -r requirements.txt (line 1))
+#7 4.609   Downloading flask-3.1.0-py3-none-any.whl.metadata (2.7 kB)
+#7 4.735 Collecting psycopg==3.2.3 (from psycopg[binary]==3.2.3->-r requirements.txt (line 2))
+#7 4.795   Downloading psycopg-3.2.3-py3-none-any.whl.metadata (4.3 kB)
+#7 4.938 Collecting gunicorn==23.0.0 (from -r requirements.txt (line 3))
+#7 5.006   Downloading gunicorn-23.0.0-py3-none-any.whl.metadata (4.4 kB)
+#7 5.122 Collecting blinker==1.9.0 (from -r requirements.txt (line 4))
+#7 5.181   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+#7 5.313 Collecting click==8.1.8 (from -r requirements.txt (line 5))
+#7 5.383   Downloading click-8.1.8-py3-none-any.whl.metadata (2.3 kB)
+#7 5.492 Collecting itsdangerous==2.2.0 (from -r requirements.txt (line 6))
+#7 5.587   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+#7 5.740 Collecting Jinja2==3.1.6 (from -r requirements.txt (line 7))
+#7 5.806   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#7 6.163 Collecting MarkupSafe==3.0.3 (from -r requirements.txt (line 8))
+#7 6.224   Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#7 6.366 Collecting Werkzeug==3.1.3 (from -r requirements.txt (line 9))
+#7 6.428   Downloading werkzeug-3.1.3-py3-none-any.whl.metadata (3.7 kB)
+#7 6.547 Collecting packaging==25.0 (from -r requirements.txt (line 10))
+#7 6.609   Downloading packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+#7 6.734 Collecting typing_extensions==4.15.0 (from -r requirements.txt (line 11))
+#7 6.794   Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+#7 7.523 Collecting psycopg-binary==3.2.3 (from psycopg[binary]==3.2.3->-r requirements.txt (line 2))
+#7 7.597   Downloading psycopg_binary-3.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.8 kB)
+#7 7.692 Downloading flask-3.1.0-py3-none-any.whl (102 kB)
+#7 7.859 Downloading psycopg-3.2.3-py3-none-any.whl (197 kB)
+#7 8.017 Downloading gunicorn-23.0.0-py3-none-any.whl (85 kB)
+#7 8.114 Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+#7 8.192 Downloading click-8.1.8-py3-none-any.whl (98 kB)
+#7 8.286 Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+#7 8.361 Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+#7 8.462 Downloading markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+#7 8.544 Downloading werkzeug-3.1.3-py3-none-any.whl (224 kB)
+#7 8.644 Downloading packaging-25.0-py3-none-any.whl (66 kB)
+#7 8.729 Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+#7 8.813 Downloading psycopg_binary-3.2.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.2 MB)
+#7 9.248    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.2/4.2 MB 10.0 MB/s eta 0:00:00
+#7 9.335 Installing collected packages: typing_extensions, psycopg-binary, packaging, MarkupSafe, itsdangerous, click, blinker, Werkzeug, psycopg, Jinja2, gunicorn, Flask
+#7 11.36 Successfully installed Flask-3.1.0 Jinja2-3.1.6 MarkupSafe-3.0.3 Werkzeug-3.1.3 blinker-1.9.0 click-8.1.8 gunicorn-23.0.0 itsdangerous-2.2.0 packaging-25.0 psycopg-3.2.3 psycopg-binary-3.2.3 typing_extensions-4.15.0
+#7 11.36 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#7 11.75 
+#7 11.75 [notice] A new release of pip is available: 25.0.1 -> 26.2.1
+#7 11.75 [notice] To update, run: pip install --upgrade pip
+#7 DONE 12.1s
+
+#8 exporting to image
+#8 exporting layers
+#8 exporting layers 3.6s done
+#8 exporting manifest sha256:6e99cbf280b781c812e43c79236c832388671257e0c6d0fe4787812f3fba6820 0.0s done
+#8 exporting config sha256:3d17572041b093f69609bcc70dc798e901752aa988678233fe969a8652e47e31 0.0s done
+#8 exporting attestation manifest sha256:06089b956e4b990866e392fc9e30fe8b214f7addfa7785e51a66d5b69ea5319f 0.1s done
+#8 exporting manifest list sha256:4e7bbd77c765ed9198371f97e2f2e526a96341652ac2c274a54b9fb12f6629a9
+#8 exporting manifest list sha256:4e7bbd77c765ed9198371f97e2f2e526a96341652ac2c274a54b9fb12f6629a9 0.0s done
+#8 naming to docker.io/library/cloud-lab2-backend:bad done
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad 1.7s done
+#8 DONE 5.5s
+exit_code=0
+Пересборка bad, замер 3: 19.417 s
+$ docker build --progress=plain -f backend/Dockerfile -t cloud-lab2-backend:good backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.43kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 95B 0.0s done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 64B done
+#4 DONE 0.0s
+
+#5 [builder 1/4] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#5 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.1s done
+#5 DONE 0.1s
+
+#6 [builder 4/4] RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+#6 CACHED
+
+#7 [runtime 3/5] COPY --from=builder /opt/venv /opt/venv
+#7 CACHED
+
+#8 [runtime 2/5] WORKDIR /app
+#8 CACHED
+
+#9 [builder 2/4] WORKDIR /build
+#9 CACHED
+
+#10 [builder 3/4] COPY requirements.txt .
+#10 CACHED
+
+#11 [runtime 4/5] RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+#11 CACHED
+
+#12 [runtime 5/5] COPY --chown=app:app app.py .
+#12 DONE 0.2s
+
+#13 exporting to image
+#13 exporting layers 0.1s done
+#13 exporting manifest sha256:d35bc7daa167cf309caf5ec5e52c4b241a075fb65a88a958fa8f5f1e0e1dc4f5 0.0s done
+#13 exporting config sha256:6e68f7984bd3bb1ec641c38cb63f39558bfb23c87d09a9a23f7780579a42d597 0.0s done
+#13 exporting attestation manifest sha256:8807c8f028122b30ef5396cf744e4f992b57d802173e7fcfe022c55c1bf5ef55 0.1s done
+#13 exporting manifest list sha256:eeb72dc05eaf74b06f66a94b301fb6ff04ef39d5b0d10a4350c0879c074ed73b
+#13 exporting manifest list sha256:eeb72dc05eaf74b06f66a94b301fb6ff04ef39d5b0d10a4350c0879c074ed73b 0.0s done
+#13 naming to docker.io/library/cloud-lab2-backend:good done
+#13 unpacking to docker.io/library/cloud-lab2-backend:good 0.1s done
+#13 DONE 0.5s
+exit_code=0
+Пересборка good, замер 3: 2.679 s
+$ docker build --progress=plain -f backend/Dockerfile.bad -t cloud-lab2-backend:bad backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.bad
+#1 transferring dockerfile: 1.24kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12
+#2 DONE 0.1s
+
+#3 [1/4] FROM docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee
+#3 resolve docker.io/library/python:3.12@sha256:63828510c8b5ccce3bf0d6fabd6f3d17d4effa1ffe690f80a67c8e2d394e03ee 0.1s done
+#3 DONE 0.1s
+
+#4 [internal] load build context
+#4 transferring context: 6.02kB 0.0s done
+#4 DONE 0.0s
+
+#5 [2/4] WORKDIR /app
+#5 CACHED
+
+#6 [3/4] COPY . .
+#6 CACHED
+
+#7 [4/4] RUN pip install -r requirements.txt
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers 0.0s done
+#8 exporting manifest sha256:2091f52f1e83e40766e42a79994cfbb587b62828b98e428761715841a72732ac 0.0s done
+#8 exporting config sha256:89eac045f2b5140e88d72cfb91c77e36f6c921d93f9d1fcd3f165e6cb636d9f1 0.0s done
+#8 exporting attestation manifest sha256:01efdd0da005359abf287e4c58decb960b12ee99c1e1a55099ae0f743877b334
+#8 exporting attestation manifest sha256:01efdd0da005359abf287e4c58decb960b12ee99c1e1a55099ae0f743877b334 0.2s done
+#8 exporting manifest list sha256:ab534a2e52b813cb2df0b6cda35f47c17140d9e618878c60fe2006121dda1bec
+#8 exporting manifest list sha256:ab534a2e52b813cb2df0b6cda35f47c17140d9e618878c60fe2006121dda1bec 0.0s done
+#8 naming to docker.io/library/cloud-lab2-backend:bad done
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad
+#8 unpacking to docker.io/library/cloud-lab2-backend:bad 1.8s done
+#8 DONE 2.3s
+exit_code=0
+$ docker build --progress=plain -f backend/Dockerfile -t cloud-lab2-backend:good backend
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.43kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 95B 0.0s done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 64B done
+#4 DONE 0.0s
+
+#5 [builder 1/4] FROM docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c
+#5 resolve docker.io/library/python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c 0.1s done
+#5 DONE 0.1s
+
+#6 [builder 2/4] WORKDIR /build
+#6 CACHED
+
+#7 [builder 3/4] COPY requirements.txt .
+#7 CACHED
+
+#8 [builder 4/4] RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+#8 CACHED
+
+#9 [runtime 3/5] COPY --from=builder /opt/venv /opt/venv
+#9 CACHED
+
+#10 [runtime 4/5] RUN groupadd --gid 10001 app && useradd --uid 10001 --gid app --no-create-home app
+#10 CACHED
+
+#11 [runtime 2/5] WORKDIR /app
+#11 CACHED
+
+#12 [runtime 5/5] COPY --chown=app:app app.py .
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers 0.0s done
+#13 exporting manifest sha256:fbca3a66eaedcfdade375e42713d6c66588c3250914159cd0fb3d3699959569f 0.0s done
+#13 exporting config sha256:fcecaa1ac047a95c8bcca9d8b7f7749c822206c5c1f25f605ae2c0a68270e152
+#13 exporting config sha256:fcecaa1ac047a95c8bcca9d8b7f7749c822206c5c1f25f605ae2c0a68270e152 done
+#13 exporting attestation manifest sha256:829cbca7df8a47c9818fe3d374d44a6fc5b37f8948653cc39f80dbf1795e591a 0.1s done
+#13 exporting manifest list sha256:cfd398f70dcba2b3ed589c39d2375bad884ec68c02012315b49c50cfafb253c9 0.0s done
+#13 naming to docker.io/library/cloud-lab2-backend:good
+#13 naming to docker.io/library/cloud-lab2-backend:good done
+#13 unpacking to docker.io/library/cloud-lab2-backend:good 0.1s done
+#13 DONE 0.3s
+exit_code=0
+$ docker image inspect cloud-lab2-backend:bad
+exit_code=0
+Размер bad: 427711435 bytes = 407.90 MiB
+$ docker image inspect cloud-lab2-backend:good
+exit_code=0
+Размер good: 56242097 bytes = 53.64 MiB
+{
+  "builds": [
+    {
+      "trial": 1,
+      "image": "bad",
+      "seconds": 20.706
+    },
+    {
+      "trial": 1,
+      "image": "good",
+      "seconds": 2.577
+    },
+    {
+      "trial": 2,
+      "image": "bad",
+      "seconds": 20.999
+    },
+    {
+      "trial": 2,
+      "image": "good",
+      "seconds": 2.712
+    },
+    {
+      "trial": 3,
+      "image": "bad",
+      "seconds": 19.417
+    },
+    {
+      "trial": 3,
+      "image": "good",
+      "seconds": 2.679
+    }
+  ],
+  "size_bytes": {
+    "bad": 427711435,
+    "good": 56242097
+  },
+  "median_seconds": {
+    "bad": 20.706,
+    "good": 2.679
+  }
+}

@@ -1,0 +1,22 @@
+Опыт: 04-recovery
+2026-10-10T00:40:41.857223+03:00
+$ docker compose -f compose.yaml ps -a -q db
+exit_code=0
+$ docker compose -f compose.yaml ps -a -q backend
+exit_code=0
+$ docker inspect 1b80257d861ad60eaf4983f42cffd3934a382af3f4a09f155eccfc72c42a1a78
+exit_code=0
+db RestartCount before=0
+$ docker kill --signal=KILL 1b80257d861ad60eaf4983f42cffd3934a382af3f4a09f155eccfc72c42a1a78
+1b80257d861ad60eaf4983f42cffd3934a382af3f4a09f155eccfc72c42a1a78
+exit_code=0
+$ curl -sS --max-time 12 -w "\nHTTP %{http_code}\n" http://127.0.0.1:5052/healthz
+frontend ok
+
+HTTP 200
+exit_code=0
+$ curl -sS --max-time 12 -w "\nHTTP %{http_code}\n" http://127.0.0.1:5052/api/healthz
+{"error":"\u0411\u0430\u0437\u0430 \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430. \u041f\u043e\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437."}
+
+HTTP 503
+exit_code=0

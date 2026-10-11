@@ -1,0 +1,686 @@
+Опыт: 06-load-tight-cpu
+2026-10-10T00:50:47.363496+03:00
+$ docker compose -f compose.yaml ps -a -q backend
+exit_code=0
+$ docker inspect 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151
+exit_code=0
+limits={"NanoCpus": 50000000, "Memory": 134217728, "MemorySwap": 134217728}
+$ docker exec 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cat /sys/fs/cgroup/cpu.stat
+usage_usec 11573524
+user_usec 10208627
+system_usec 1364897
+nice_usec 0
+nr_periods 332
+nr_throttled 239
+throttled_usec 22931114
+nr_bursts 0
+burst_usec 0
+exit_code=0
+$ docker inspect 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.11%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"59.91%","MemUsage":"76.68MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"1.43MB / 533kB","PIDs":"13"}
+{"BlockIO":"0B / 225kB","CPUPerc":"4.08%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.68%","MemUsage":"24.77MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"24.8kB / 1.41MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.57%","MemUsage":"4.203MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"512kB / 511kB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"1.02%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"62.00%","MemUsage":"79.36MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"2.36MB / 1.52MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.56%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.25%","MemUsage":"23.68MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"29.1kB / 2.34MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.46%","MemUsage":"4.137MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"1.51MB / 1.5MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"0.96%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"61.96%","MemUsage":"79.31MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"2.37MB / 2.51MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.52%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.43%","MemUsage":"21.59MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"30.4kB / 2.34MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"1.41%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.81%","MemUsage":"4.359MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"2.5MB / 2.5MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.12%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"65.91%","MemUsage":"84.37MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"3.3MB / 2.51MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"5.47%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.38%","MemUsage":"24.01MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"39.4kB / 3.39MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.68%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.45%","MemUsage":"4.129MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"2.99MB / 2.99MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.04%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"66.49%","MemUsage":"85.11MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"4.36MB / 3.5MB","PIDs":"8"}
+{"BlockIO":"0B / 225kB","CPUPerc":"7.22%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.80%","MemUsage":"22.52MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"45.3kB / 4.33MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"8.90%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.47%","MemUsage":"4.141MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"3.49MB / 3.49MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.91%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"67.34%","MemUsage":"86.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"4.7MB / 4MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"4.17%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.17%","MemUsage":"23.48MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"49.3kB / 4.66MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.18%","MemUsage":"3.953MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"3.99MB / 3.99MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.37%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"67.92%","MemUsage":"86.94MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"5.29MB / 4.01MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.86%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.86%","MemUsage":"22.69MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"56kB / 5.59MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.45%","MemUsage":"4.129MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"3.99MB / 4MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.86%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"69.76%","MemUsage":"89.29MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"6.09MB / 4.01MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"9.42%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.63%","MemUsage":"22.1MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"60.5kB / 6.05MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.70%","MemUsage":"4.285MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"4MB / 4MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.99%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"73.98%","MemUsage":"94.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"7.02MB / 4.51MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"5.80%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.10%","MemUsage":"23.29MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"68kB / 7.06MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.36%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.96%","MemUsage":"4.453MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"4.49MB / 4.5MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.94%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"75.60%","MemUsage":"96.77MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"7.87MB / 5.01MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.96%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.00%","MemUsage":"23.03MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"73.8kB / 7.91MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.49%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.38%","MemUsage":"4.086MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"4.99MB / 5MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.51%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"76.34%","MemUsage":"97.71MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"9.35MB / 5.02MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"3.10%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.69%","MemUsage":"24.81MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"81.2kB / 9.3MB","PIDs":"14"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.15%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.20%","MemUsage":"3.965MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5MB / 5MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.20%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"77.52%","MemUsage":"99.22MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"9.35MB / 5.02MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.71%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.16%","MemUsage":"20.89MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"81.8kB / 9.3MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.16%","MemUsage":"3.941MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5MB / 5MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.30%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"77.43%","MemUsage":"99.11MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"9.82MB / 5.03MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"5.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.25%","MemUsage":"21.11MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"87.4kB / 9.77MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.07%","MemUsage":"3.887MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5MB / 5MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.06%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"77.98%","MemUsage":"99.82MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"9.82MB / 5.03MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.59%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.41%","MemUsage":"24.1MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"89.8kB / 9.77MB","PIDs":"10"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.15%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.94%","MemUsage":"3.805MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5MB / 5.01MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.35%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"79.72%","MemUsage":"102MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"10.3MB / 5.04MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.91%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.76%","MemUsage":"24.98MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"93.8kB / 9.78MB","PIDs":"10"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.91%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.05%","MemUsage":"3.871MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5MB / 5.01MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.77%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"81.28%","MemUsage":"104MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"10.3MB / 5.04MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"9.22%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.53%","MemUsage":"21.83MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"98.3kB / 10.2MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.14%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.31%","MemUsage":"4.039MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.01MB / 5.01MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.70%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"84.06%","MemUsage":"107.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"10.3MB / 5.05MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"2.71%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.35%","MemUsage":"21.38MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"102kB / 10.2MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"2.44%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.14%","MemUsage":"3.93MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.01MB / 5.01MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"1.42%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"84.24%","MemUsage":"107.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"10.3MB / 5.05MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.52%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.69%","MemUsage":"24.81MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"104kB / 10.3MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.25%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.80%","MemUsage":"3.715MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.01MB / 5.01MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.43%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"85.54%","MemUsage":"109.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"10.8MB / 5.05MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.90%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.10%","MemUsage":"23.29MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"110kB / 11.2MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.69%","MemUsage":"3.641MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.01MB / 5.02MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.80%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"86.53%","MemUsage":"110.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"11.2MB / 5.06MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.81%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.61%","MemUsage":"22.05MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"111kB / 11.2MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.62%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.68%","MemUsage":"3.637MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.01MB / 5.02MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"1.92%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"86.29%","MemUsage":"110.4MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"11.2MB / 5.06MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"12.17%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.51%","MemUsage":"21.78MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"114kB / 11.2MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.17%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.90%","MemUsage":"3.777MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.02MB / 5.03MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.97%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"88.03%","MemUsage":"112.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"11.2MB / 5.07MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.14%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.17%","MemUsage":"23.48MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"117kB / 11.2MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"8.42%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.50%","MemUsage":"3.52MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.02MB / 5.03MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.36%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"89.23%","MemUsage":"114.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"11.7MB / 5.07MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"2.34%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.01%","MemUsage":"23.06MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"122kB / 11.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.18%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.42%","MemUsage":"3.469MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.02MB / 5.03MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.69%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"92.60%","MemUsage":"118.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"11.7MB / 5.07MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.78%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.43%","MemUsage":"24.13MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"124kB / 11.7MB","PIDs":"10"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.13%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.27%","MemUsage":"3.375MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.02MB / 5.03MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.02%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"94.42%","MemUsage":"120.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"11.7MB / 5.08MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"2.68%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.23%","MemUsage":"21.06MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"125kB / 11.7MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.24%","MemUsage":"3.355MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.02MB / 5.04MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.83%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"94.94%","MemUsage":"121.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"11.7MB / 5.08MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"17.94%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.70%","MemUsage":"22.28MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"129kB / 11.7MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.19%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.01%","MemUsage":"3.848MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.03MB / 5.04MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.60%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"95.32%","MemUsage":"122MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"11.7MB / 5.08MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.03%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.29%","MemUsage":"23.79MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"133kB / 11.7MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.36%","MemUsage":"3.434MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.03MB / 5.04MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"4.93%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"94.65%","MemUsage":"121.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.2MB / 5.09MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"9.66%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.81%","MemUsage":"25.12MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"137kB / 12.1MB","PIDs":"10"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.13%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.74%","MemUsage":"3.676MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.03MB / 5.04MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"1.30%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"95.99%","MemUsage":"122.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.2MB / 5.09MB","PIDs":"13"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.14%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.98%","MemUsage":"22.98MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"139kB / 12.1MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.72%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.99%","MemUsage":"3.836MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.03MB / 5.05MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"5.11%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"97.89%","MemUsage":"125.3MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.2MB / 5.1MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.30%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.05%","MemUsage":"23.17MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"141kB / 12.1MB","PIDs":"10"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.97%","MemUsage":"3.82MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.03MB / 5.05MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"406kB / 0B","CPUPerc":"8.50%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"99.83%","MemUsage":"127.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.1MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"8.21%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.17%","MemUsage":"23.48MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"145kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"4.31%","MemUsage":"2.758MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.04MB / 5.05MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"455kB / 0B","CPUPerc":"0.00%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"77.11%","MemUsage":"98.71MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.1MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.97%","MemUsage":"22.97MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"146kB / 12.6MB","PIDs":"9"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.59%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.01%","MemUsage":"3.848MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.04MB / 5.05MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"463kB / 0B","CPUPerc":"5.18%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"82.06%","MemUsage":"105MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.11MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"2.40%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.98%","MemUsage":"20.44MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"146kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.98%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"7.03%","MemUsage":"4.496MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.04MB / 5.06MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"549kB / 0B","CPUPerc":"5.20%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"74.01%","MemUsage":"94.73MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.11MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.29%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.56%","MemUsage":"21.92MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"147kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.55%","MemUsage":"4.191MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.05MB / 5.06MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"610kB / 0B","CPUPerc":"5.36%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"76.23%","MemUsage":"97.57MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.11MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.57%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.55%","MemUsage":"21.88MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"148kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.83%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.52%","MemUsage":"4.176MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.05MB / 5.06MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"692kB / 0B","CPUPerc":"5.41%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"78.88%","MemUsage":"101MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.11MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.35%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.76%","MemUsage":"22.41MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"150kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.16%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.49%","MemUsage":"4.152MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.05MB / 5.06MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"692kB / 0B","CPUPerc":"5.01%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"80.64%","MemUsage":"103.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.11MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.27%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.74%","MemUsage":"22.38MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"152kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.16%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"7.32%","MemUsage":"4.684MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.05MB / 5.07MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"696kB / 0B","CPUPerc":"4.83%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"83.87%","MemUsage":"107.4MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.12MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.52%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.73%","MemUsage":"22.34MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"153kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"7.12%","MemUsage":"4.559MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.05MB / 5.07MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"696kB / 0B","CPUPerc":"5.08%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"85.32%","MemUsage":"109.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.12MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.90%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.49%","MemUsage":"21.75MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"155kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.99%","MemUsage":"4.473MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.05MB / 5.08MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"696kB / 0B","CPUPerc":"5.03%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"85.90%","MemUsage":"110MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.12MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.66%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.97%","MemUsage":"20.4MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"156kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.40%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.99%","MemUsage":"4.473MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.06MB / 5.08MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"696kB / 0B","CPUPerc":"4.92%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"86.67%","MemUsage":"110.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.12MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.01%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.60%","MemUsage":"22.01MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"157kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.15%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.83%","MemUsage":"4.371MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.06MB / 5.08MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"696kB / 0B","CPUPerc":"5.31%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"87.64%","MemUsage":"112.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.12MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.75%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.00%","MemUsage":"20.49MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"158kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"2.14%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.86%","MemUsage":"4.391MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.06MB / 5.08MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"696kB / 0B","CPUPerc":"5.49%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"89.51%","MemUsage":"114.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.12MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.62%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.72%","MemUsage":"22.32MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"159kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.13%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.64%","MemUsage":"4.25MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.06MB / 5.09MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"696kB / 0B","CPUPerc":"4.79%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"90.08%","MemUsage":"115.3MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.13MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"13.19%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.69%","MemUsage":"22.24MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"160kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.35%","MemUsage":"4.066MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.06MB / 5.09MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"696kB / 0B","CPUPerc":"5.12%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"90.96%","MemUsage":"116.4MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.13MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.94%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.58%","MemUsage":"21.96MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"162kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.37%","MemUsage":"3.438MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.06MB / 5.09MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"930kB / 0B","CPUPerc":"2.33%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"91.52%","MemUsage":"117.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.13MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.76%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.34%","MemUsage":"21.36MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"162kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.26%","MemUsage":"3.363MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.07MB / 5.09MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"930kB / 0B","CPUPerc":"5.32%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"93.52%","MemUsage":"119.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.13MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.01%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.70%","MemUsage":"22.28MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"163kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.91%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.32%","MemUsage":"4.047MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.07MB / 5.1MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"930kB / 0B","CPUPerc":"1.34%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"85.28%","MemUsage":"109.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.13MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.80%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.99%","MemUsage":"20.45MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"164kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"2.65%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"8.13%","MemUsage":"5.203MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.07MB / 5.1MB","PIDs":"8"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"946kB / 0B","CPUPerc":"4.79%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"87.80%","MemUsage":"112.4MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.13MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"7.48%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.48%","MemUsage":"21.71MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"165kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.38%","MemUsage":"3.441MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.07MB / 5.1MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"5.03%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"88.17%","MemUsage":"112.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.14MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.42%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.97%","MemUsage":"20.4MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"166kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.13%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.40%","MemUsage":"4.098MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.07MB / 5.1MB","PIDs":"4"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"4.75%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"92.43%","MemUsage":"118.3MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.14MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.01%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.40%","MemUsage":"21.5MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"167kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.60%","MemUsage":"3.582MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.07MB / 5.1MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"4.96%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"93.78%","MemUsage":"120MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.14MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"8.09%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.00%","MemUsage":"20.48MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"168kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.42%","MemUsage":"3.469MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.08MB / 5.11MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"1.30%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"94.67%","MemUsage":"121.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.14MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.91%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.36%","MemUsage":"21.4MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"169kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.10%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.23%","MemUsage":"3.984MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.08MB / 5.11MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"4.78%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"98.45%","MemUsage":"126MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.14MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"7.37%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.13%","MemUsage":"20.81MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"169kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.15%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.08%","MemUsage":"3.891MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.08MB / 5.11MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"4.33%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"89.43%","MemUsage":"114.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.14MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.22%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.91%","MemUsage":"20.25MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"171kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"7.18%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.55%","MemUsage":"3.551MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.08MB / 5.11MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"5.30%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"90.39%","MemUsage":"115.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.14MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.25%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.80%","MemUsage":"22.52MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"172kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.18%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.91%","MemUsage":"3.781MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.08MB / 5.12MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"5.03%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"91.86%","MemUsage":"117.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.15MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.76%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.21%","MemUsage":"23.58MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"172kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.78%","MemUsage":"3.699MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.09MB / 5.12MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"5.09%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"92.43%","MemUsage":"118.3MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.15MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.03%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.68%","MemUsage":"22.22MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"174kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.56%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.83%","MemUsage":"3.73MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.09MB / 5.12MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"4.98%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"92.54%","MemUsage":"118.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.15MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.95%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.20%","MemUsage":"20.98MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"176kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.17%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.23%","MemUsage":"3.348MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.09MB / 5.12MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"987kB / 0B","CPUPerc":"5.15%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"94.49%","MemUsage":"120.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.15MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.43%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.90%","MemUsage":"22.78MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"178kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.91%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.46%","MemUsage":"4.137MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.09MB / 5.12MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"1.04MB / 0B","CPUPerc":"5.08%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"95.45%","MemUsage":"122.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.16MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.49%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.70%","MemUsage":"22.27MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"179kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.82%","MemUsage":"3.727MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.09MB / 5.12MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"1.04MB / 0B","CPUPerc":"4.42%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"97.66%","MemUsage":"125MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.16MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.85%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.60%","MemUsage":"22.01MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"180kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.12%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.71%","MemUsage":"3.656MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.1MB / 5.14MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"1.23MB / 0B","CPUPerc":"5.38%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"99.95%","MemUsage":"127.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.16MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.44%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.67%","MemUsage":"22.18MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"181kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.28%","MemUsage":"3.379MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.1MB / 5.14MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"1.86MB / 0B","CPUPerc":"0.00%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"99.98%","MemUsage":"128MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.16MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.76%","MemUsage":"19.87MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.25%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"4.11%","MemUsage":"2.629MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.1MB / 5.14MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.08MB / 0B","CPUPerc":"0.30%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"80.25%","MemUsage":"102.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.16MB","PIDs":"16"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.76%","MemUsage":"19.87MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.40%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.42%","MemUsage":"4.109MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.1MB / 5.14MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.08MB / 0B","CPUPerc":"6.50%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"81.19%","MemUsage":"103.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.01%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.17%","MemUsage":"20.91MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.60%","MemUsage":"4.223MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.11MB / 5.15MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.09MB / 0B","CPUPerc":"4.99%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"84.40%","MemUsage":"108MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.23%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.07%","MemUsage":"20.66MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.49%","MemUsage":"4.152MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.11MB / 5.15MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.09MB / 0B","CPUPerc":"5.28%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"78.30%","MemUsage":"100.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.05%","MemUsage":"20.61MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.48%","MemUsage":"4.148MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.11MB / 5.15MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.29MB / 0B","CPUPerc":"4.90%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"81.59%","MemUsage":"104.4MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.02%","MemUsage":"20.54MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.78%","MemUsage":"4.34MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.11MB / 5.15MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.29MB / 0B","CPUPerc":"5.09%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"85.54%","MemUsage":"109.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.02%","MemUsage":"20.53MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.13%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"9.11%","MemUsage":"5.832MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.11MB / 5.15MB","PIDs":"8"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.29MB / 0B","CPUPerc":"4.57%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"86.29%","MemUsage":"110.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.95%","MemUsage":"20.36MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.16%","MemUsage":"3.941MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.12MB / 5.16MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.29MB / 0B","CPUPerc":"4.71%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"77.34%","MemUsage":"99MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"8"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.00%","MemUsage":"20.49MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.07%","MemUsage":"3.883MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.12MB / 5.16MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.33MB / 0B","CPUPerc":"7.80%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"80.85%","MemUsage":"103.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.00%","MemUsage":"20.48MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.05%","MemUsage":"3.871MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.12MB / 5.16MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.33MB / 0B","CPUPerc":"6.48%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"82.11%","MemUsage":"105.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.97%","MemUsage":"20.41MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.33%","MemUsage":"4.051MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.12MB / 5.16MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.39MB / 0B","CPUPerc":"5.79%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"83.26%","MemUsage":"106.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.90%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.16%","MemUsage":"20.9MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"1.12%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.56%","MemUsage":"4.195MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.13MB / 5.17MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.41MB / 0B","CPUPerc":"6.43%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"84.00%","MemUsage":"107.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.11%","MemUsage":"20.76MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.56%","MemUsage":"4.195MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.13MB / 5.17MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.49MB / 0B","CPUPerc":"5.22%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"84.91%","MemUsage":"108.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.07%","MemUsage":"20.66MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.46%","MemUsage":"4.137MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.13MB / 5.17MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.56MB / 0B","CPUPerc":"1.25%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"85.57%","MemUsage":"109.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.05%","MemUsage":"20.6MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.94%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.51%","MemUsage":"4.164MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.13MB / 5.17MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.58MB / 0B","CPUPerc":"4.83%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"86.54%","MemUsage":"110.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.7MB / 5.17MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.91%","MemUsage":"20.25MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.10%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.38%","MemUsage":"4.082MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.13MB / 5.17MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.63MB / 0B","CPUPerc":"9.02%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"87.88%","MemUsage":"112.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.17MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"7.19%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.15%","MemUsage":"20.87MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"6.39%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.41%","MemUsage":"4.102MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.14MB / 5.18MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.65MB / 0B","CPUPerc":"5.23%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"90.20%","MemUsage":"115.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.17MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.04%","MemUsage":"20.57MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.29%","MemUsage":"4.023MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.14MB / 5.18MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.68MB / 0B","CPUPerc":"6.46%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"94.09%","MemUsage":"120.4MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.17MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"8.08%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.91%","MemUsage":"20.25MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.77%","MemUsage":"3.691MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.14MB / 5.18MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.7MB / 0B","CPUPerc":"6.58%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"95.15%","MemUsage":"121.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.17MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.02%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.95%","MemUsage":"20.34MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.13%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.76%","MemUsage":"3.688MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.14MB / 5.19MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.73MB / 0B","CPUPerc":"6.26%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"95.73%","MemUsage":"122.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.17MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.00%","MemUsage":"20.47MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.46%","MemUsage":"4.133MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.14MB / 5.19MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.73MB / 0B","CPUPerc":"3.69%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"85.73%","MemUsage":"109.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.18MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.39%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.01%","MemUsage":"20.51MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.94%","MemUsage":"3.801MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.15MB / 5.2MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.74MB / 0B","CPUPerc":"5.57%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"87.08%","MemUsage":"111.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.18MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.22%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.15%","MemUsage":"20.87MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"182kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.94%","MemUsage":"3.801MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.15MB / 5.2MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.77MB / 0B","CPUPerc":"5.57%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"87.78%","MemUsage":"112.4MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.18MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.56%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.08%","MemUsage":"20.69MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"183kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.41%","MemUsage":"3.465MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.15MB / 5.2MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.77MB / 0B","CPUPerc":"4.97%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"89.92%","MemUsage":"115.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.18MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.91%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.08%","MemUsage":"20.69MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"184kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.58%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.41%","MemUsage":"3.465MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.15MB / 5.2MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.77MB / 0B","CPUPerc":"5.41%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"91.19%","MemUsage":"116.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.18MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.02%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.35%","MemUsage":"21.38MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"184kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.72%","MemUsage":"3.66MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.15MB / 5.2MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.79MB / 0B","CPUPerc":"5.44%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"93.50%","MemUsage":"119.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.18MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.41%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.52%","MemUsage":"21.8MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"186kB / 12.6MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.12%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.58%","MemUsage":"3.57MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.15MB / 5.21MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.83MB / 0B","CPUPerc":"4.75%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"96.18%","MemUsage":"123.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.18MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.58%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.18%","MemUsage":"20.95MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"187kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.58%","MemUsage":"3.57MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.15MB / 5.21MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.83MB / 0B","CPUPerc":"5.53%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"98.81%","MemUsage":"126.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.18MB","PIDs":"17"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.99%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.00%","MemUsage":"20.48MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"187kB / 12.6MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.27%","MemUsage":"4.012MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.15MB / 5.21MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"2.83MB / 0B","CPUPerc":"4.95%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"98.36%","MemUsage":"125.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"12.8MB / 5.19MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.97%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"9.17%","MemUsage":"23.48MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"189kB / 12.6MB","PIDs":"8"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"8.46%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.35%","MemUsage":"4.062MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.16MB / 5.21MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"3.27MB / 0B","CPUPerc":"6.02%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"99.77%","MemUsage":"127.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.19MB","PIDs":"13"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.35%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.25%","MemUsage":"21.12MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"1.32%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"4.43%","MemUsage":"2.832MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.16MB / 5.22MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"4.49MB / 0B","CPUPerc":"0.21%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"99.87%","MemUsage":"127.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.19MB","PIDs":"12"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.40%","MemUsage":"21.51MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"7"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.45%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.21%","MemUsage":"3.332MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.16MB / 5.22MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"4.74MB / 0B","CPUPerc":"6.39%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"80.16%","MemUsage":"102.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"1.71%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.73%","MemUsage":"19.8MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.10%","MemUsage":"3.266MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.16MB / 5.22MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"4.77MB / 0B","CPUPerc":"1.68%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"63.28%","MemUsage":"81MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.02%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.04%","MemUsage":"20.59MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.07%","MemUsage":"3.883MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.17MB / 5.23MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"4.77MB / 0B","CPUPerc":"4.97%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"66.01%","MemUsage":"84.49MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"7.66%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.12%","MemUsage":"20.78MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"6.02%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.87%","MemUsage":"3.758MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.17MB / 5.23MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5MB / 0B","CPUPerc":"5.29%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"68.54%","MemUsage":"87.73MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.10%","MemUsage":"20.74MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.77%","MemUsage":"3.691MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.18MB / 5.23MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5MB / 0B","CPUPerc":"4.77%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"74.59%","MemUsage":"95.48MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.07%","MemUsage":"20.65MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.68%","MemUsage":"3.633MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.18MB / 5.23MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5MB / 0B","CPUPerc":"5.35%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"75.66%","MemUsage":"96.84MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.05%","MemUsage":"20.62MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.95%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.94%","MemUsage":"3.805MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.18MB / 5.25MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5MB / 0B","CPUPerc":"5.07%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"76.43%","MemUsage":"97.82MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"14"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.95%","MemUsage":"20.34MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.65%","MemUsage":"3.617MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.18MB / 5.25MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.02MB / 0B","CPUPerc":"2.71%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"75.58%","MemUsage":"96.75MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"6.48%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.25%","MemUsage":"21.12MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.47%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.82%","MemUsage":"3.727MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.18MB / 5.25MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.17MB / 0B","CPUPerc":"4.65%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"78.79%","MemUsage":"100.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.19%","MemUsage":"20.98MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.28%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.82%","MemUsage":"3.727MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.18MB / 5.25MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.22MB / 0B","CPUPerc":"7.65%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"81.55%","MemUsage":"104.4MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.2MB / 5.2MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.16%","MemUsage":"20.88MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.70%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.79%","MemUsage":"3.707MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.18MB / 5.25MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.24MB / 0B","CPUPerc":"4.55%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"82.71%","MemUsage":"105.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.15%","MemUsage":"20.86MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.15%","MemUsage":"3.297MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.19MB / 5.26MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.28MB / 0B","CPUPerc":"4.87%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"86.10%","MemUsage":"110.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.11%","MemUsage":"20.76MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.43%","MemUsage":"3.473MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.19MB / 5.26MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.35MB / 0B","CPUPerc":"5.57%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"87.98%","MemUsage":"112.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"7.30%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.06%","MemUsage":"20.64MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.43%","MemUsage":"3.473MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.19MB / 5.26MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.37MB / 0B","CPUPerc":"5.18%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"88.36%","MemUsage":"113.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.06%","MemUsage":"20.64MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.70%","MemUsage":"3.648MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.19MB / 5.26MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.39MB / 0B","CPUPerc":"6.25%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"88.43%","MemUsage":"113.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.02%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.02%","MemUsage":"20.54MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.96%","MemUsage":"3.812MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.19MB / 5.26MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.4MB / 0B","CPUPerc":"5.40%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"90.77%","MemUsage":"116.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.02%","MemUsage":"20.53MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.22%","MemUsage":"3.98MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.2MB / 5.27MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.44MB / 0B","CPUPerc":"2.78%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"91.90%","MemUsage":"117.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.01%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.97%","MemUsage":"20.41MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.09%","MemUsage":"3.895MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.2MB / 5.27MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.49MB / 0B","CPUPerc":"5.01%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"93.44%","MemUsage":"119.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"11.23%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.05%","MemUsage":"20.61MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"6.75%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.44%","MemUsage":"4.121MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.2MB / 5.27MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.49MB / 0B","CPUPerc":"5.36%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"94.41%","MemUsage":"120.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.05%","MemUsage":"20.61MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.38%","MemUsage":"4.082MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.2MB / 5.27MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.49MB / 0B","CPUPerc":"1.87%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"86.15%","MemUsage":"110.3MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.2MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.00%","MemUsage":"20.47MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.97%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.34%","MemUsage":"4.055MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.21MB / 5.28MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.54MB / 0B","CPUPerc":"5.21%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"92.86%","MemUsage":"118.9MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.98%","MemUsage":"20.42MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.20%","MemUsage":"3.969MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.21MB / 5.28MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.54MB / 0B","CPUPerc":"4.43%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"93.80%","MemUsage":"120.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.01%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.09%","MemUsage":"20.71MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.76%","MemUsage":"3.684MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.21MB / 5.28MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.55MB / 0B","CPUPerc":"5.51%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"93.77%","MemUsage":"120MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"3.96%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.04%","MemUsage":"20.58MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.26%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.75%","MemUsage":"3.68MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.21MB / 5.29MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.55MB / 0B","CPUPerc":"5.09%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"95.76%","MemUsage":"122.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.04%","MemUsage":"20.58MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.09%","MemUsage":"3.898MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.21MB / 5.29MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.58MB / 0B","CPUPerc":"5.47%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"97.50%","MemUsage":"124.8MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"7.43%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.18%","MemUsage":"20.93MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"5.95%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.29%","MemUsage":"4.027MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.22MB / 5.3MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.6MB / 0B","CPUPerc":"4.99%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"99.40%","MemUsage":"127.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.15%","MemUsage":"20.86MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"12"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.21%","MemUsage":"3.977MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.22MB / 5.3MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.69MB / 0B","CPUPerc":"5.07%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"91.81%","MemUsage":"117.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.08%","MemUsage":"20.69MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.71%","MemUsage":"3.656MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.22MB / 5.3MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.69MB / 0B","CPUPerc":"4.69%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"93.36%","MemUsage":"119.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.01%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.14%","MemUsage":"20.84MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.71%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.00%","MemUsage":"3.84MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.22MB / 5.3MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.77MB / 0B","CPUPerc":"4.78%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"95.87%","MemUsage":"122.7MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.14%","MemUsage":"20.84MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.00%","MemUsage":"3.84MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.22MB / 5.3MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.77MB / 0B","CPUPerc":"5.47%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"97.35%","MemUsage":"124.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.18%","MemUsage":"20.94MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.76%","MemUsage":"3.688MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.23MB / 5.31MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.79MB / 0B","CPUPerc":"5.02%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"97.07%","MemUsage":"124.2MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"11"}
+{"BlockIO":"0B / 225kB","CPUPerc":"8.57%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.30%","MemUsage":"21.24MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.54%","MemUsage":"3.543MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.23MB / 5.31MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.79MB / 0B","CPUPerc":"8.65%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"88.64%","MemUsage":"113.5MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"10"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.23%","MemUsage":"21.08MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.88%","MemUsage":"3.762MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.23MB / 5.31MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.79MB / 0B","CPUPerc":"4.67%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"90.29%","MemUsage":"115.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"7.29%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.24%","MemUsage":"21.08MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"4.44%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.17%","MemUsage":"3.949MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.23MB / 5.31MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.79MB / 0B","CPUPerc":"5.14%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"92.62%","MemUsage":"118.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"9"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.19%","MemUsage":"20.97MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.00%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.06%","MemUsage":"3.879MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.23MB / 5.31MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.79MB / 0B","CPUPerc":"5.00%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"96.12%","MemUsage":"123MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.15%","MemUsage":"20.85MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.22%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.65%","MemUsage":"3.617MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.23MB / 5.32MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.79MB / 0B","CPUPerc":"5.07%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"96.58%","MemUsage":"123.6MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"8.54%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.09%","MemUsage":"20.72MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"3.02%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"6.74%","MemUsage":"4.316MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.23MB / 5.32MB","PIDs":"9"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.79MB / 0B","CPUPerc":"4.61%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"97.72%","MemUsage":"125.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"8.09%","MemUsage":"20.72MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"0.38%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.50%","MemUsage":"3.52MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.24MB / 5.32MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1
+{"BlockIO":"5.79MB / 0B","CPUPerc":"5.31%","Container":"07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151","ID":"07690189a248","MemPerc":"98.49%","MemUsage":"126.1MiB / 128MiB","Name":"cloud-lab2-backend-1","NetIO":"13.3MB / 5.21MB","PIDs":"15"}
+{"BlockIO":"0B / 225kB","CPUPerc":"0.00%","Container":"cloud-lab2-db-1","ID":"1b80257d861a","MemPerc":"7.96%","MemUsage":"20.37MiB / 256MiB","Name":"cloud-lab2-db-1","NetIO":"191kB / 13.1MB","PIDs":"6"}
+{"BlockIO":"0B / 4.1kB","CPUPerc":"11.48%","Container":"cloud-lab2-frontend-1","ID":"5795f3beda5f","MemPerc":"5.38%","MemUsage":"3.445MiB / 64MiB","Name":"cloud-lab2-frontend-1","NetIO":"5.24MB / 5.32MB","PIDs":"2"}
+exit_code=0
+$ docker stats --no-stream --format "{{json .}}" 07690189a248d09bf4c29e97c8e165c8eb38f0e2dd554c36b8bd0fc31b498151 cloud-lab2-db-1 cloud-lab2-frontend-1

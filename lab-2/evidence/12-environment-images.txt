@@ -1,0 +1,20 @@
+Опыт: 12-environment-images
+2026-10-10T01:03:13.283214+03:00
+$ docker info --format "CPUs={{.NCPU}} Memory={{.MemTotal}} Architecture={{.Architecture}}"
+CPUs=12 Memory=3755458560 Architecture=x86_64
+exit_code=0
+$ docker image ls cloud-lab2-backend
+IMAGE                     ID             DISK USAGE   CONTENT SIZE   EXTRA
+cloud-lab2-backend:bad    ab534a2e52b8       1.65GB          428MB        
+cloud-lab2-backend:good   e7c32b2d42f7        231MB         56.2MB   U    
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+exit_code=0
+$ docker image inspect cloud-lab2-backend:bad --format "content_bytes={{.Size}} user={{json .Config.User}} health={{json .Config.Healthcheck}}"
+content_bytes=427711435 user="" health=null
+exit_code=0
+$ docker image inspect cloud-lab2-backend:good --format "content_bytes={{.Size}} user={{json .Config.User}} health={{json .Config.Healthcheck}}"
+content_bytes=56242226 user="app" health={"Test":["CMD-SHELL","python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/healthz', timeout=7)\""],"Interval":5000000000,"Timeout":8000000000,"StartPeriod":15000000000,"Retries":3}
+exit_code=0
+$ docker compose -f compose.yaml exec -T backend python --version
+Python 3.12.12
+exit_code=0

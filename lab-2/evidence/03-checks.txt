@@ -1,0 +1,75 @@
+Опыт: 03-checks
+2026-10-10T00:40:04.527864+03:00
+$ docker compose -f compose.yaml exec -T backend whoami
+app
+exit_code=0
+$ docker compose -f compose.yaml exec -T frontend whoami
+nginx
+exit_code=0
+$ docker compose -f compose.yaml exec -T backend sh -c "test ! -e /app/notes-demo.txt && echo 'notes-demo.txt excluded'"
+notes-demo.txt excluded
+exit_code=0
+$ docker run --rm --entrypoint sh cloud-lab2-backend:bad -c "whoami; ls /app/notes-demo.txt"
+root
+/app/notes-demo.txt
+exit_code=0
+$ docker compose -f compose.yaml ps -a -q db
+exit_code=0
+$ docker inspect ade4012fd9940549be7222dc24503a20e18020d023f1b21c027c948c400d474f
+exit_code=0
+db networks=['cloud-lab2_data']
+$ docker compose -f compose.yaml ps -a -q frontend
+exit_code=0
+$ docker inspect 6f6565825b1f4254d2acee5fc93b2dac0f61e1ca1e8dc3410092afc91a180fad
+exit_code=0
+frontend networks=['cloud-lab2_web']
+$ docker compose -f compose.yaml exec -T backend python -c "import socket; s=socket.create_connection(('db',5432),2); print('backend -> db: connected'); s.close()"
+backend -> db: connected
+exit_code=0
+$ docker compose -f compose.yaml exec -T frontend sh -c "nc -w 2 db 5432 < /dev/null"
+nc: bad address 'db'
+exit_code=1
+$ docker compose -f compose.yaml exec -T frontend sh -c "nc -w 2 172.19.0.2 5432 < /dev/null"
+exit_code=1
+POST /api/tasks HTTP 201: {"created_at": "2026-10-09T21:40:15.860444", "id": 1, "text": "Проверить, что задача переживёт удаление контейнера БД"}
+GET before=[{"created_at": "2026-10-09T21:40:15.860444", "id": 1, "text": "Проверить, что задача переживёт удаление контейнера БД"}]
+Удаляем только контейнер lab-2. Именованный том остаётся.
+$ docker compose -f compose.yaml stop db
+ Container cloud-lab2-db-1 Stopping 
+ Container cloud-lab2-db-1 Stopped
+exit_code=0
+$ docker compose -f compose.yaml rm -f db
+Going to remove cloud-lab2-db-1
+ Container cloud-lab2-db-1 Removing 
+ Container cloud-lab2-db-1 Removed
+exit_code=0
+$ docker compose -f compose.yaml up -d db --wait --wait-timeout 90
+ Container cloud-lab2-db-1 Creating 
+ Container cloud-lab2-db-1 Created 
+ Container cloud-lab2-db-1 Starting 
+ Container cloud-lab2-db-1 Started 
+ Container cloud-lab2-db-1 Waiting 
+ Container cloud-lab2-db-1 Healthy
+exit_code=0
+$ docker compose -f compose.yaml ps -a -q db
+exit_code=0
+$ docker inspect 1b80257d861ad60eaf4983f42cffd3934a382af3f4a09f155eccfc72c42a1a78
+exit_code=0
+db container before=ade4012fd9940549be7222dc24503a20e18020d023f1b21c027c948c400d474f
+db container after =1b80257d861ad60eaf4983f42cffd3934a382af3f4a09f155eccfc72c42a1a78
+volume before=cloud-lab2_postgres_data
+volume after =cloud-lab2_postgres_data
+GET after=[{"created_at": "2026-10-09T21:40:15.860444", "id": 1, "text": "Проверить, что задача переживёт удаление контейнера БД"}]
+POST empty task: HTTP 400
+$ docker compose -f compose.yaml ps
+NAME                    IMAGE                                                                                              COMMAND                  SERVICE    CREATED         STATUS                   PORTS
+cloud-lab2-backend-1    cloud-lab2-backend:good                                                                            "gunicorn --bind 0.0…"   backend    2 minutes ago   Up 2 minutes (healthy)   5000/tcp
+cloud-lab2-db-1         postgres:17.6-alpine3.22@sha256:ef257d85f76e48da1c64832459b59fcaba1a4dac97bf5d7450c77753542eee94   "docker-entrypoint.s…"   db         8 seconds ago   Up 6 seconds (healthy)   5432/tcp
+cloud-lab2-frontend-1   cloud-lab2-frontend:good                                                                           "nginx -g 'daemon of…"   frontend   2 minutes ago   Up 2 minutes (healthy)   127.0.0.1:5052->8080/tcp
+exit_code=0
+$ curl -sS --max-time 12 -w "\nHTTP %{http_code}\n" http://127.0.0.1:5052/api/tasks
+[{"created_at":"2026-10-09T21:40:15.860444","id":1,"text":"\u041f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c, \u0447\u0442\u043e \u0437\u0430\u0434\u0430\u0447\u0430 \u043f\u0435\u0440\u0435\u0436\u0438\u0432\u0451\u0442 \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u0435 \u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u0430 \u0411\u0414"}]
+
+HTTP 200
+exit_code=0
+PASS: пользователь, ignore, сеть, том, чтение/запись, валидация

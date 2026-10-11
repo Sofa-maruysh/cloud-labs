@@ -1,0 +1,12 @@
+Опыт: 05-load-data
+2026-10-10T00:46:40.606364+03:00
+$ docker compose -f compose.yaml exec -T db psql -U labuser -d labdb -c "DELETE FROM tasks WHERE text LIKE '[load] %'; INSERT INTO tasks(text) SELECT '[load] ' || i || ' ' || repeat('x',170) FROM generate_series(1,2000) i;"
+DELETE 0
+INSERT 0 2000
+exit_code=0
+$ docker compose -f compose.yaml exec -T db psql -U labuser -d labdb -c "SELECT count(*) AS tasks_for_load FROM tasks;"
+ tasks_for_load 
+----------------
+           2002
+(1 row)
+exit_code=0

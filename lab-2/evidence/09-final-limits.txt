@@ -1,0 +1,35 @@
+Опыт: 09-final-limits
+2026-10-10T01:02:21.928900+03:00
+$ docker compose -f compose.yaml ps -a -q backend
+exit_code=0
+$ docker update --cpus 0.5 --memory 256m --memory-swap 256m 6fdb834547626996219bcdc35249320f6fb1ea298ba23d969ec952361b4df422
+6fdb834547626996219bcdc35249320f6fb1ea298ba23d969ec952361b4df422
+exit_code=0
+$ docker compose -f compose.yaml up -d --force-recreate backend --wait --wait-timeout 120
+ Container cloud-lab2-db-1 Running 
+ Container cloud-lab2-backend-1 Recreate 
+ Container cloud-lab2-backend-1 Recreated 
+ Container cloud-lab2-db-1 Waiting 
+ Container cloud-lab2-db-1 Healthy 
+ Container cloud-lab2-backend-1 Starting 
+ Container cloud-lab2-backend-1 Started 
+ Container cloud-lab2-backend-1 Waiting 
+ Container cloud-lab2-db-1 Waiting 
+ Container cloud-lab2-db-1 Healthy 
+ Container cloud-lab2-backend-1 Healthy
+exit_code=0
+$ docker compose -f compose.yaml up -d --wait --wait-timeout 120
+ Container cloud-lab2-db-1 Running 
+ Container cloud-lab2-backend-1 Running 
+ Container cloud-lab2-frontend-1 Running 
+ Container cloud-lab2-db-1 Waiting 
+ Container cloud-lab2-db-1 Healthy 
+ Container cloud-lab2-backend-1 Waiting 
+ Container cloud-lab2-backend-1 Healthy 
+ Container cloud-lab2-frontend-1 Waiting 
+ Container cloud-lab2-db-1 Waiting 
+ Container cloud-lab2-backend-1 Waiting 
+ Container cloud-lab2-frontend-1 Healthy 
+ Container cloud-lab2-backend-1 Healthy 
+ Container cloud-lab2-db-1 Healthy
+exit_code=0

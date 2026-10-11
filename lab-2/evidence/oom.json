@@ -1,0 +1,8 @@
+{
+  "initial_restarts": 0,
+  "final_restarts": 3,
+  "oom_events": 5,
+  "statuses": {
+    "502": 2358
+  }
+}

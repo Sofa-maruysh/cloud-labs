@@ -1,0 +1,42 @@
+{
+  "builds": [
+    {
+      "trial": 1,
+      "image": "bad",
+      "seconds": 20.706
+    },
+    {
+      "trial": 1,
+      "image": "good",
+      "seconds": 2.577
+    },
+    {
+      "trial": 2,
+      "image": "bad",
+      "seconds": 20.999
+    },
+    {
+      "trial": 2,
+      "image": "good",
+      "seconds": 2.712
+    },
+    {
+      "trial": 3,
+      "image": "bad",
+      "seconds": 19.417
+    },
+    {
+      "trial": 3,
+      "image": "good",
+      "seconds": 2.679
+    }
+  ],
+  "size_bytes": {
+    "bad": 427711435,
+    "good": 56242097
+  },
+  "median_seconds": {
+    "bad": 20.706,
+    "good": 2.679
+  }
+}

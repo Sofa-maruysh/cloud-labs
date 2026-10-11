@@ -1,0 +1,7 @@
+# Только для краткой проверки работающего антипримера через compose run.
+services:
+  backend:
+    image: cloud-lab2-backend:bad
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.bad
