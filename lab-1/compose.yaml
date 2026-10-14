@@ -1,0 +1,83 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: labdb
+      POSTGRES_USER: labuser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-labpassword}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U labuser -d labdb"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    networks:
+      - data
+
+  backend-1:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://labuser:${POSTGRES_PASSWORD:-labpassword}@db:5432/labdb
+      BACKEND_INSTANCE: backend-1
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - edge
+      - data
+
+  backend-2:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://labuser:${POSTGRES_PASSWORD:-labpassword}@db:5432/labdb
+      BACKEND_INSTANCE: backend-2
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - edge
+      - data
+
+  nginx:
+    image: nginx:1.28-alpine
+    ports:
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - ./nginx/htpasswd:/etc/nginx/htpasswd:ro
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./docs:/usr/share/nginx/docs:ro
+      - ./second-project:/usr/share/nginx/second-project:ro
+    depends_on:
+      backend-1:
+        condition: service_healthy
+      backend-2:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-check-certificate -q -O /dev/null https://127.0.0.1/ || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks:
+      - edge
+
+  checker:
+    image: python:3.12-alpine
+    profiles: ["tools"]
+    entrypoint: ["python", "/checks/flood.py"]
+    volumes:
+      - ./scripts:/checks:ro
+    networks:
+      - edge
+
+volumes:
+  postgres_data:
+
+networks:
+  edge:
+  data:
+    internal: true
+

@@ -1,0 +1,41 @@
+== 0. Все сервисы запущены ==
+  сервисы: backend-1 backend-2 db nginx 
+  [OK]   db, backend-1, backend-2 и nginx работают
+== 1. HTTP перенаправляется на HTTPS ==
+  301|https://127.0.0.1/
+  [OK]   получен 301 на HTTPS
+== 2. nginx самостоятельно отдаёт фронтенд ==
+  [OK]   главная страница доступна по HTTPS
+== 3. Балансировка между двумя бэкендами ==
+  инстансы: backend-1 backend-2 backend-1 backend-2 backend-1 backend-2 backend-1 backend-2
+  [OK]   ответили оба инстанса
+== 4. alias /docs ==
+  [OK]   /docs отдаётся из отдельного каталога
+== 5. Собственная страница 404 ==
+  [OK]   возвращается собственная 404
+== 6. Basic Auth для /admin ==
+  [OK]   без пароля получен 401
+  [OK]   с верным паролем получен 200
+== 7. Ограничение частоты запросов ==
+  статусы: 200 200 200 200 200 200 200 200 200 200 200 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429 429
+  200=11, 429=29
+  [OK]   лимит срабатывает со статусом 429
+== 8. Виртуальные хосты ==
+  [OK]   other.local отдаёт второй проект
+  [OK]   /api отсутствует на втором хосте
+  [OK]   lab1.local отдаёт основной проект
+  [OK]   неизвестный Host не раскрывает проекты
+== 9. Отказоустойчивость при остановке backend-2 ==
+ Container lab-1-backend-2-1 Stopping 
+ Container lab-1-backend-2-1 Stopped 
+  после остановки: коды 200=1, инстансы: backend-1 backend-1 backend-1 backend-1 backend-1 backend-1
+  [OK]   API продолжает отвечать 200
+  [OK]   трафик идёт только на backend-1
+  запускаю backend-2 обратно
+ Container lab-1-db-1 Waiting 
+ Container lab-1-db-1 Healthy 
+ Container lab-1-backend-2-1 Starting 
+ Container lab-1-backend-2-1 Started 
+  [OK]   backend-2 вернулся в балансировку
+
+Итог: OK=16 FAIL=0

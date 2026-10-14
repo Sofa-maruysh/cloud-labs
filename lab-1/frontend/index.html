@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Список задач</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Список задач</h1>
+    <p class="subtitle">nginx отдаёт страницу, <code>/api</code> уходит на бэкенд через upstream</p>
+
+    <form id="task-form">
+      <input id="task-input" name="text" type="text" placeholder="Новая задача" maxlength="200" required>
+      <button type="submit">Добавить</button>
+    </form>
+
+    <ul id="task-list"></ul>
+    <p id="status" class="status"></p>
+    <footer class="footer">Ответил инстанс: <span id="instance">—</span></footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

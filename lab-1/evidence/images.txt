@@ -1,0 +1,5 @@
+CONTAINER           REPOSITORY          TAG                 PLATFORM            IMAGE ID            SIZE                CREATED
+lab-1-backend-1-1   lab-1-backend-1     latest              linux/amd64         ade892c6f614        226MB               57 minutes ago
+lab-1-backend-2-1   lab-1-backend-2     latest              linux/amd64         1b02e86f1cfc        226MB               57 minutes ago
+lab-1-db-1          postgres            17-alpine           linux/amd64         b0f9560a2de0        423MB               3 weeks ago
+lab-1-nginx-1       nginx               1.28-alpine         linux/amd64         a8b39bd9cf0f        92.5MB              6 months ago

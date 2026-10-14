@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Docs</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Docs (alias)</h1>
+    <p>Эта папка физически лежит отдельно от фронтенда и подключена в nginx через директиву <code>alias</code>:</p>
+    <pre>location /docs/ {
+    alias /usr/share/nginx/docs/;
+    index index.html;
+    autoindex on;
+}</pre>
+    <p>Содержимое папки:</p>
+    <ul>
+      <li><a href="nginx-quick-notes.md">nginx-quick-notes.md</a> — конспект по директивам из лабы</li>
+      <li><a href="checklist.md">checklist.md</a> — чек-лист из задания</li>
+    </ul>
+  </main>
+</body>
+</html>

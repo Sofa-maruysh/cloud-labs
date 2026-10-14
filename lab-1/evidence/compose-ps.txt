@@ -1,0 +1,5 @@
+NAME                IMAGE                COMMAND                  SERVICE     CREATED          STATUS                            PORTS
+lab-1-backend-1-1   lab-1-backend-1      "gunicorn --bind 0.0…"   backend-1   31 minutes ago   Up 31 minutes (healthy)           5000/tcp
+lab-1-backend-2-1   lab-1-backend-2      "gunicorn --bind 0.0…"   backend-2   31 minutes ago   Up 3 seconds (health: starting)   5000/tcp
+lab-1-db-1          postgres:17-alpine   "docker-entrypoint.s…"   db          31 minutes ago   Up 31 minutes (healthy)           5432/tcp
+lab-1-nginx-1       nginx:1.28-alpine    "/docker-entrypoint.…"   nginx       31 minutes ago   Up 31 minutes (healthy)           127.0.0.1:80->80/tcp, 127.0.0.1:443->443/tcp

@@ -1,0 +1,119 @@
+name: lab-1
+services:
+  backend-1:
+    environment:
+      BACKEND_INSTANCE: backend-1
+      DATABASE_URL: postgresql://labuser:labpassword@db:5432/labdb
+    networks:
+      data: null
+      edge: null
+    build:
+      context: C:\Users\duchi\Downloads\lab-1\backend
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+  backend-2:
+    environment:
+      BACKEND_INSTANCE: backend-2
+      DATABASE_URL: postgresql://labuser:labpassword@db:5432/labdb
+    networks:
+      data: null
+      edge: null
+    build:
+      context: C:\Users\duchi\Downloads\lab-1\backend
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+  db:
+    environment:
+      POSTGRES_DB: labdb
+      POSTGRES_PASSWORD: labpassword
+      POSTGRES_USER: labuser
+    image: postgres:17-alpine
+    networks:
+      data: null
+    volumes:
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgresql/data
+        volume: {}
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U labuser -d labdb
+      timeout: 3s
+      interval: 3s
+      retries: 20
+  nginx:
+    image: nginx:1.28-alpine
+    networks:
+      edge: null
+    volumes:
+      - type: bind
+        source: C:\Users\duchi\Downloads\lab-1\nginx\nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+        bind: {}
+      - type: bind
+        source: C:\Users\duchi\Downloads\lab-1\nginx\certs
+        target: /etc/nginx/certs
+        read_only: true
+        bind: {}
+      - type: bind
+        source: C:\Users\duchi\Downloads\lab-1\nginx\htpasswd
+        target: /etc/nginx/htpasswd
+        read_only: true
+        bind: {}
+      - type: bind
+        source: C:\Users\duchi\Downloads\lab-1\frontend
+        target: /usr/share/nginx/html
+        read_only: true
+        bind: {}
+      - type: bind
+        source: C:\Users\duchi\Downloads\lab-1\docs
+        target: /usr/share/nginx/docs
+        read_only: true
+        bind: {}
+      - type: bind
+        source: C:\Users\duchi\Downloads\lab-1\second-project
+        target: /usr/share/nginx/second-project
+        read_only: true
+        bind: {}
+    depends_on:
+      backend-1:
+        condition: service_healthy
+        required: true
+      backend-2:
+        condition: service_healthy
+        required: true
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - wget --no-check-certificate -q -O /dev/null https://127.0.0.1/ || exit 1
+      timeout: 3s
+      interval: 5s
+      retries: 12
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 80
+        published: "80"
+        protocol: tcp
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 443
+        published: "443"
+        protocol: tcp
+networks:
+  data:
+    name: lab-1_data
+    internal: true
+  edge:
+    name: lab-1_edge
+volumes:
+  postgres_data:
+    name: lab-1_postgres_data
