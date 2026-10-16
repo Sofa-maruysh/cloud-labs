@@ -31,23 +31,3 @@ jobs:
         run: |
           cd lab-3
           docker build -t cloud-lab3-backend:latest backend
-
-      - name: Login to registry
-        run: |
-          echo "Пароль от registry: SuperSecretPassword123"
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
-        run: |
-         docker tag cloud-lab3-backend:latest ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/backend:latest
-         docker push ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/backend:latest
-
-      - name: Deploy
-        run: |
-          cd lab-3
-          docker compose up -d
-
-      - name: Verify
-        run: |
-          sleep 10
-          curl -f http://localhost:5052/api/healthz
