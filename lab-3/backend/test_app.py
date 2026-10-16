@@ -31,7 +31,7 @@ def test_health_endpoint(client):
     assert response.status_code == 200
     data = response.get_json()
     assert data["status"] == "ok"
-    assert data["database"] == "СЛОМАНО"   # ← специально сломано
+    assert data["database"] == "ok"   # ← специально сломано
 
 
 def test_add_task_rejects_empty_text(client):
