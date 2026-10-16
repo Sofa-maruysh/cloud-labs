@@ -7,6 +7,9 @@ COPY requirements.txt .
 RUN python -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 FROM python:3.12.12-slim-bookworm@sha256:593bd06efe90efa80dc4eee3948be7c0fde4134606dd40d8dd8dbcade98e669c AS runtime
+RUN apt-get update \
+  && apt-get -y dist-upgrade \
+  && rm -rf /var/lib/apt/lists/*
 ENV PATH="/opt/venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 WORKDIR /app
 # В финальный образ переносим готовое окружение, а не весь каталог сборки.
