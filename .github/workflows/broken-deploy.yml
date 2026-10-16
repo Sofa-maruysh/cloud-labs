@@ -1,0 +1,79 @@
+name: Lab 3 - Broken Deploy (демонстрация)
+
+on:
+  push:
+    branches:
+      - feature/lab-3
+    paths:
+      - 'broken-trigger.txt'
+
+env:
+  IMAGE_NAME: cloud-lab3-backend
+
+jobs:
+  broken-deploy:
+    name: Deploy broken image and show it fails
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build broken image
+        run: |
+          mkdir -p /tmp/broken
+          cat > /tmp/broken/Dockerfile <<'EOF'
+          FROM python:3.12.12-slim-bookworm
+          WORKDIR /app
+          CMD ["sh", "-c", "echo 'BROKEN RELEASE — падаем на старте'; exit 1"]
+          EOF
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:broken /tmp/broken
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push broken image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:broken
+
+      - name: Start PostgreSQL
+        run: |
+          docker run -d --name lab3-db \
+            -e POSTGRES_USER=labuser \
+            -e POSTGRES_PASSWORD=labpass \
+            -e POSTGRES_DB=labdb \
+            postgres:17.6-alpine3.22
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in $(seq 1 30); do
+            if docker exec lab3-db pg_isready -U labuser -d labdb > /dev/null 2>&1; then
+              echo "PostgreSQL is ready"; exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Deploy broken version
+        run: |
+          docker run -d --name lab3-backend \
+            --link lab3-db:db \
+            -e DATABASE_URL=postgresql://labuser:labpass@db:5432/labdb \
+            -p 5000:5000 \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:broken
+
+      - name: Show that broken release is dead
+        run: |
+          sleep 5
+          echo "=== Container status ==="
+          docker ps -a --filter name=lab3-backend
+          echo ""
+          echo "=== Container logs ==="
+          docker logs lab3-backend || true
+          echo ""
+          echo "=== curl /api/healthz (should FAIL) ==="
+          curl -sS -w "\nHTTP %{http_code}\n" --max-time 5 http://localhost:5000/api/healthz || echo "CURL FAILED — сервис не отвечает (это ожидаемо)"
+          echo ""
+          echo "=== ПРОД СЛОМАН. Теперь поменяй rollback-trigger.txt и запушь для отката. ==="
