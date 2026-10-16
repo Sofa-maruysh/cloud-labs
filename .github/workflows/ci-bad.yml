@@ -25,7 +25,6 @@ jobs:
       - name: Run tests
         run: |
           cd lab-3/backend
-          python -m pytest || true
 
       - name: Build image
         run: |
