@@ -1,10 +1,20 @@
 """Простые тесты для API списка задач."""
 import os
-import pytest
-from unittest.mock import patch
+import sys
+from unittest.mock import patch, MagicMock
+
+# Мокаем psycopg.connect ДО импорта app, чтобы app.py не пошёл в реальную БД
+fake_conn = MagicMock()
+fake_conn.__enter__.return_value = fake_conn
+fake_conn.__exit__.return_value = False
+fake_conn.execute.return_value.fetchone.return_value = (1,)
 
 os.environ.setdefault("DATABASE_URL", "postgresql://fake:fake@localhost:5432/fake")
 
+import psycopg
+psycopg.connect = MagicMock(return_value=fake_conn)
+
+import pytest
 import app as app_module
 
 
@@ -17,13 +27,11 @@ def client():
 
 def test_health_endpoint(client):
     """ /api/healthz должен отвечать 200 и правильным JSON. """
-    with patch.object(app_module, "get_connection") as mock_conn:
-        mock_conn.return_value.__enter__.return_value.execute.return_value.fetchone.return_value = (1,)
-        response = client.get("/api/healthz")
-        assert response.status_code == 200
-        data = response.get_json()
-        assert data["status"] == "ok"
-        assert data["database"] == "СЛОМАНО"
+    response = client.get("/api/healthz")
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data["status"] == "ok"
+    assert data["database"] == "СЛОМАНО"   # ← специально сломано
 
 
 def test_add_task_rejects_empty_text(client):
