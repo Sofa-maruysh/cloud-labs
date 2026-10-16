@@ -1,0 +1,124 @@
+name: Lab 3 - Rollback Demo (ломаем и откатываем)
+
+on:
+  push:
+    branches:
+      - feature/lab-3
+    paths:
+      - 'rollback-demo-trigger.txt'
+
+env:
+  IMAGE_NAME: cloud-lab3-backend
+
+jobs:
+  rollback-demo:
+    name: Break prod and rollback
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # ===== 1. Поднимаем "рабочий прод" из latest =====
+      - name: Pull working image (latest)
+        run: |
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Start PostgreSQL
+        run: |
+          docker run -d --name lab3-db \
+            -e POSTGRES_USER=labuser \
+            -e POSTGRES_PASSWORD=labpass \
+            -e POSTGRES_DB=labdb \
+            postgres:17.6-alpine3.22
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in $(seq 1 30); do
+            if docker exec lab3-db pg_isready -U labuser -d labdb > /dev/null 2>&1; then
+              echo "PostgreSQL is ready"; exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Deploy working version
+        run: |
+          docker run -d --name lab3-backend \
+            --link lab3-db:db \
+            -e DATABASE_URL=postgresql://labuser:labpass@db:5432/labdb \
+            -p 5000:5000 \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          sleep 5
+          echo "=== Рабочая версия запущена ==="
+          curl -sS -w "\nHTTP %{http_code}\n" http://localhost:5000/api/healthz
+
+      # ===== 2. Собираем и пушим битую версию =====
+      - name: Build broken image
+        run: |
+          mkdir -p /tmp/broken
+          cat > /tmp/broken/Dockerfile <<'EOF'
+          FROM python:3.12.12-slim-bookworm
+          WORKDIR /app
+          CMD ["sh", "-c", "echo 'BROKEN RELEASE — падаем на старте'; exit 1"]
+          EOF
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:broken /tmp/broken
+
+      - name: Push broken image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:broken
+
+      # ===== 3. ЛОМАЕМ прод — деплоим битую версию =====
+      - name: Break prod (deploy broken version)
+        run: |
+          docker stop lab3-backend
+          docker rm lab3-backend
+          docker run -d --name lab3-backend \
+            --link lab3-db:db \
+            -e DATABASE_URL=postgresql://labuser:labpass@db:5432/labdb \
+            -p 5000:5000 \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:broken
+          sleep 5
+          echo "=== ПРОД СЛОМАН ==="
+          docker ps -a --filter name=lab3-backend
+          echo ""
+          echo "=== Логи битого контейнера ==="
+          docker logs lab3-backend || true
+          echo ""
+          echo "=== curl /api/healthz (ДОЛЖЕН УПАСТЬ) ==="
+          curl -sS -w "\nHTTP %{http_code}\n" --max-time 5 http://localhost:5000/api/healthz || echo "CURL FAILED — сервис мёртв, это ожидаемо"
+
+      # ===== 4. ОТКАТ на рабочий latest =====
+      - name: ROLLBACK to working version (with timing)
+        run: |
+          START=$(date +%s)
+          docker stop lab3-backend
+          docker rm lab3-backend
+          docker run -d --name lab3-backend \
+            --link lab3-db:db \
+            -e DATABASE_URL=postgresql://labuser:labpass@db:5432/labdb \
+            -p 5000:5000 \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:5000/api/healthz > /dev/null 2>&1; then
+              END=$(date +%s)
+              echo "=== ROLLBACK COMPLETED in $((END-START)) seconds ==="
+              break
+            fi
+            sleep 1
+          done
+
+      # ===== 5. Проверяем, что сервис живой =====
+      - name: Verify service is alive after rollback
+        run: |
+          echo "=== curl /api/healthz (ПОСЛЕ ОТКАТА) ==="
+          curl -sS -w "\nHTTP %{http_code}\n" http://localhost:5000/api/healthz
+          echo ""
+          echo "=== curl /api/tasks ==="
+          curl -sS -w "\nHTTP %{http_code}\n" http://localhost:5000/api/tasks
+          echo ""
+          echo "=== ИТОГ: сломали → откатили → сервис снова живой ==="
