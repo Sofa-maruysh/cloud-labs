@@ -39,8 +39,8 @@ jobs:
 
       - name: Push image
         run: |
-          docker tag cloud-lab3-backend:latest ghcr.io/${{ github.repository }}/backend:latest
-          docker push ghcr.io/${{ github.repository }}/backend:latest
+         docker tag cloud-lab3-backend:latest ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/backend:latest
+         docker push ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/backend:latest
 
       - name: Deploy
         run: |
