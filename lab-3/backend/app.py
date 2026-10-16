@@ -82,4 +82,7 @@ def add_task():
 
 
 # При импорте gunicorn тоже создаёт таблицу, как запуск app.py в lab-0.
-create_table()
+try:
+    create_table()
+except Exception as e:
+    print(f"create_table warning: {e}")
