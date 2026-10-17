@@ -1,5 +1,0 @@
-# Учебный эксперимент. Объём памяти заведомо тесный для двух workers.
-services:
-  backend:
-    mem_limit: 32m
-    memswap_limit: 32m
