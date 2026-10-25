@@ -17,3 +17,12 @@
 
 Перед коммитом убедитесь, что `check-run.txt` заканчивается строкой `FAIL=0`.
 
+Для задания со звёздочкой запустите:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\security-check.ps1
+```
+
+Результат безопасной проверки локального nginx будет сохранён в `security-check-run.txt`.
+

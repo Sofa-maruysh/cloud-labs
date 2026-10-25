@@ -1,0 +1,46 @@
+Authorized local nginx security check
+Target: https://127.0.0.1 (Host: localhost)
+The script refuses external targets and does not perform DDoS or password guessing.
+Started: 2026-10-25 22:35:25 +03:00
+
+=== 1. Path traversal ===
+/docs/../nginx/nginx.conf                  HTTP 404; sensitive content=False
+/docs/%2e%2e/nginx/nginx.conf              HTTP 404; sensitive content=False
+/%2e%2e/%2e%2e/etc/passwd                  HTTP 400; sensitive content=False
+[BLOCKED] No local file was exposed through path traversal.
+
+=== 2. Content discovery with a small wordlist ===
+/admin/                  HTTP 401
+/docs/                   HTTP 200
+/api/tasks               HTTP 200
+/.env                    HTTP 404
+/.git/config             HTTP 404
+/nginx.conf              HTTP 404
+/backup.zip              HTTP 404
+/robots.txt              HTTP 404
+[BLOCKED] No sensitive candidate returned HTTP 200.
+Note: /admin/, /docs/ and /api/tasks are expected application routes.
+
+=== 3. Basic Auth bypass attempts ===
+/admin/                  HTTP 401; protected page returned=False
+/admin                   HTTP 301; protected page returned=False
+/admin%2f                HTTP 401; protected page returned=False
+/admin/..;/              HTTP 401; protected page returned=False
+[BLOCKED] The protected admin page was not returned without credentials.
+
+=== 4. Host header / virtual-host confusion ===
+unknown.local -> HTTP 404; project content returned=False
+other.local   -> HTTP 200; separate project=True
+[BLOCKED] Unknown Host was rejected and the second host stayed isolated.
+
+=== 5. HTTP method and information disclosure ===
+TRACE / -> HTTP 405
+[BLOCKED] TRACE was not accepted.
+[FOUND] Server header discloses the exact nginx version: 1.28.3
+Recommendation: add 'server_tokens off;' to the nginx http block.
+
+=== Summary ===
+Categories tested: 5
+Confirmed findings: 1
+A zero or non-zero finding count is acceptable for the assignment: the attempts and analysis are documented.
+Finished: 2026-10-25 22:35:27 +03:00
