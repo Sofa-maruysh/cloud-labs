@@ -1,0 +1,9 @@
+# Small wordlist for authorized local content discovery
+admin/
+docs/
+api/tasks
+.env
+.git/config
+nginx.conf
+backup.zip
+robots.txt
